@@ -1,0 +1,205 @@
+{
+  "paddy": {
+    "classes": [
+      "Bacterial Leaf Blight",
+      "Brown Spot",
+      "Leaf Blast",
+      "Tungro",
+      "Healthy"
+    ],
+    "details": {
+      "Bacterial Leaf Blight": {
+        "odia": {
+          "remedy": "ଷ୍ଟ୍ରେପ୍ଟୋମାଇସିନ୍ (2g/10L) ସହିତ ସ୍ପ୍ରେ କରନ୍ତୁ | ଜଳଖରା ନିୟନ୍ତ୍ରଣ କରନ୍ତୁ | ପ୍ରଭାବିତ ପତ୍ର କାଟି ଦିଅନ୍ତୁ।",
+          "description": "ଏହା ଧାନରେ ଥିବା ଏକ ବ୍ୟାକ୍ଟେରିଆ ରୋଗ | ପତ୍ରରେ ପୀତ ଧାର ହୁଏ।",
+          "dosage": "2g ଷ୍ଟ୍ରେପ୍ଟୋମାଇସିନ୍ 10 ଲିଟର ପାଣିରେ",
+          "warnings": "ଅତ୍ୟଧିକ ମାତ୍ରା ବ୍ୟବହାର କରନ୍ତୁ ନାହିଁ | ପ୍ରତି 10–12 ଦିନରେ ସ୍ପ୍ରେ।"
+        },
+        "en": {
+          "remedy": "Spray Streptomycin (2g/10L) + remove infected leaves.",
+          "description": "Bacterial disease causing yellow margins and leaf blight.",
+          "dosage": "2g Streptomycin per 10L water",
+          "warnings": "Avoid overdose. Spray every 10–12 days."
+        }
+      },
+
+      "Brown Spot": {
+        "odia": {
+          "remedy": "ପ୍ରୋପିକୋନାଜୋଲ୍ 1ml/ଲିଟର ସ୍ପ୍ରେ କରନ୍ତୁ | ପାଣି ତଳ ନକରନ୍ତୁ।",
+          "description": "ପତ୍ରରେ ବ brown ଧଳା ଚକତି ଦିଖାଯାଏ।",
+          "dosage": "1ml per 1L water",
+          "warnings": "ଅତ୍ୟଧିକ ନିଟ୍ରୋଜେନ୍ ଦିଅନ୍ତୁ ନାହିଁ | ପ୍ରଭାବିତ ପତ୍ର କାଟନ୍ତୁ।"
+        },
+        "en": {
+          "remedy": "Spray Propiconazole 1ml/L. Avoid water stagnation.",
+          "description": "Fungal spots on leaves leading to yield reduction.",
+          "dosage": "1ml per liter",
+          "warnings": "Do not overuse Nitrogen fertilizer."
+        }
+      },
+
+      "Leaf Blast": {
+        "odia": {
+          "remedy": "ଟ୍ରାଇସାଇକ୍ଲାଜୋଲ୍ (Beam/Tricyclazole) ସ୍ପ୍ରେ କରନ୍ତୁ।",
+          "description": "ପତ୍ରରେ ଚକତି ଆକାରର ଧଳା/ଧୂସର ଆଘାତ।",
+          "dosage": "0.6g per liter",
+          "warnings": "ପାଣି ଯଥାସମୟରେ ଛାଡନ୍ତୁ | ଗଭୀର ସ୍ଥାନରେ ପାଣି ମାଡି ରଖନ୍ତୁ ନାହିଁ।"
+        },
+        "en": {
+          "remedy": "Spray Tricyclazole. Burn infected leaves.",
+          "description": "Classic blast lesions with spindle shapes.",
+          "dosage": "0.6g per liter",
+          "warnings": "Avoid deep water. Improve airflow."
+        }
+      },
+
+      "Tungro": {
+        "odia": {
+          "remedy": "ପୀତପତ୍ରା କୀଟ ନିୟନ୍ତ୍ରଣ କରନ୍ତୁ | ପ୍ରଭାବିତ ବୃକ୍ଷ ହଟାନ୍ତୁ।",
+          "description": "Tungro virus due to leafhopper pests.",
+          "dosage": "As per pesticide label",
+          "warnings": "ସଂକ୍ରମିତ ଗଛ ହଟାନ୍ତୁ।"
+        },
+        "en": {
+          "remedy": "Control green leafhopper. Remove infected plants.",
+          "description": "Virus transmitted by pests.",
+          "dosage": "Follow pesticide label",
+          "warnings": "Remove infected plants immediately."
+        }
+      },
+
+      "Healthy": {
+        "odia": {
+          "remedy": "ଧାନ ସ୍ୱସ୍ଥ ଅଛି | ସାଧାରଣ ପରିଚର୍ଯ୍ୟା ଚାଲୁ ରଖନ୍ତୁ।",
+          "description": "କୌଣସି ରୋଗ ଚିହ୍ନ ନାହିଁ।",
+          "dosage": "N/A",
+          "warnings": "ନିୟମିତ ନିରୀକ୍ଷଣ କରନ୍ତୁ।"
+        },
+        "en": {
+          "remedy": "Your crop is healthy.",
+          "description": "No visible disease symptoms.",
+          "dosage": "N/A",
+          "warnings": "Keep monitoring."
+        }
+      }
+    }
+  },
+
+  "skin": {
+    "classes": [
+      "Acne",
+      "Eczema",
+      "Psoriasis",
+      "Ringworm (Dadru)",
+      "Scabies",
+      "Fungal Infection",
+      "Healthy Skin"
+    ],
+    "details": {
+      "Acne": {
+        "odia": {
+          "remedy": "ମୁହଁ ସଫା ରଖନ୍ତୁ | ବେଞ୍ଜୋଇଲ୍ ପେରଅକ୍ସାଇଡ୍ ବ୍ୟବହାର କରନ୍ତୁ",
+          "description": "ମୁହଁର କଳା/ଲାଲ ଗୋଟିଆ ଗୋଟିଆ ଗଠନ।",
+          "dosage": "Once daily",
+          "warnings": "ଜୋରକରି ଚିପିବେ ନାହିଁ।"
+        },
+        "en": {
+          "remedy": "Use Benzoyl peroxide. Keep face clean.",
+          "description": "Red/black bumps on face.",
+          "dosage": "Once daily",
+          "warnings": "Do not squeeze."
+        }
+      },
+
+      "Eczema": {
+        "odia": {
+          "remedy": "ମୋଇଶ୍ଚରାଇଜର୍ ବ୍ୟବହାର କରନ୍ତୁ | ଖୋଜୁ ଦିଅନ୍ତୁ ନାହିଁ।",
+          "description": "ଚର୍ମ ଶୁଖିଗଲା, ରାସ୍ ଓ ଖୋଜୁ।",
+          "dosage": "2–3 times daily",
+          "warnings": "ସୁଗନ୍ଧ ଥିବା ସାବୁନ୍ ବ୍ୟବହାର କରନ୍ତୁ ନାହିଁ।"
+        },
+        "en": {
+          "remedy": "Use moisturizer frequently.",
+          "description": "Dry, itchy, inflamed skin.",
+          "dosage": "2–3 times daily",
+          "warnings": "Avoid scented soaps."
+        }
+      },
+
+      "Psoriasis": {
+        "odia": {
+          "remedy": "ଡାକ୍ତର ଦେଖାନ୍ତୁ | ସ୍ୱଳ୍ପ ଗରମ ପାଣିରେ ଗୋସା।",
+          "description": "ରୂପା ଝରଣା ମତୋ ପତ୍ରିକା।",
+          "dosage": "Under doctor advice",
+          "warnings": "ଇଚ୍ଛାମତେ ଔଷଧ ବ୍ୟବହାର କରନ୍ତୁ ନାହିଁ।"
+        },
+        "en": {
+          "remedy": "Consult dermatologist.",
+          "description": "Thick silver scales on skin.",
+          "dosage": "Doctor prescribed",
+          "warnings": "Avoid self-medication."
+        }
+      },
+
+      "Ringworm (Dadru)": {
+        "odia": {
+          "remedy": "କ୍ଲୋଟ୍ରିମାଜୋଲ୍ / କିଟୋକୋନାଜୋଲ୍ କ୍ରିମ୍ ଲଗାନ୍ତୁ",
+          "description": "ଗୋଲାକାର ଲାଲ ଫଙ୍ଗସ୍ ରୋଗ।",
+          "dosage": "2 times daily",
+          "warnings": "ଘରେ ସବୁଜୀ ଜୋଗାଯୋଗ ଏଡାନ୍ତୁ।"
+        },
+        "en": {
+          "remedy": "Clotrimazole/Ketoconazole cream.",
+          "description": "Circular fungal skin infection.",
+          "dosage": "Twice daily",
+          "warnings": "Avoid sharing clothes."
+        }
+      },
+
+      "Scabies": {
+        "odia": {
+          "remedy": "ପରମେଥ୍ରିନ୍ ଲୋସନ୍ | ସମସ୍ତ ଶରୀରେ ଲଗାନ୍ତୁ।",
+          "description": "ମାଇଟ୍ ଦ୍ୱାରା ହୁଏଥିବା ଖୋଜୁ।",
+          "dosage": "As per label",
+          "warnings": "ସମସ୍ତ ପରିବାର ଚିକିତ୍ସା ଦରକାର।"
+        },
+        "en": {
+          "remedy": "Permethrin lotion.",
+          "description": "Mite-caused intense itching.",
+          "dosage": "As per doctor",
+          "warnings": "All family members must be treated."
+        }
+      },
+
+      "Fungal Infection": {
+        "odia": {
+          "remedy": "ଏଣ୍ଟି-ଫଙ୍ଗାଲ୍ କ୍ରିମ୍ | ସଫା ଓ ଶୁଖିଲା ରଖନ୍ତୁ।",
+          "description": "ଚର୍ମରେ ବ୍ୟାପକ ଫଙ୍ଗସ୍।",
+          "dosage": "2 times daily",
+          "warnings": "ଭିଜା ସ୍ଥାନ ଏଡାନ୍ତୁ।"
+        },
+        "en": {
+          "remedy": "Antifungal cream.",
+          "description": "General fungal infection.",
+          "dosage": "Twice daily",
+          "warnings": "Avoid moist areas."
+        }
+      },
+
+      "Healthy Skin": {
+        "odia": {
+          "remedy": "ଆପଣଙ୍କ ଚର୍ମ ସଂପୂର୍ଣ୍ଣ ସ୍ୱସ୍ଥ।",
+          "description": "କୌଣସି ରୋଗ ଚିହ୍ନ ନାହିଁ।",
+          "dosage": "N/A",
+          "warnings": "ନିୟମିତ ସଫାଇ ରଖନ୍ତୁ।"
+        },
+        "en": {
+          "remedy": "Your skin is healthy.",
+          "description": "No visible issues.",
+          "dosage": "N/A",
+          "warnings": "Keep clean."
+        }
+      }
+    }
+  }
+}
