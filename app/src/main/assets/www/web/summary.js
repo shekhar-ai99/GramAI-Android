@@ -53,11 +53,11 @@
   }
 
   /* Rule-based answer: picks the matching lines from the summary. Works offline with no model. */
-  function answer(q, f, lbl) {
+  function answer(q, f, lbl, forced) {
     const lines = summarize(f, lbl), by = (...ks) => lines.filter((l) => ks.includes(l.k));
     const map = { spray: by('sumSpray'), weather: by('sumSpray'), disease: by('sumProblem', 'secNow', 'organic', 'chemical'), stage: by('sumStage'), harvest: by('sumHarvest'),
       vaccine: by('sumVacc'), breeding: by('sumBreed'), scheme: by('sumSchemes'), news: by('sumNews'), tips: by('sumTip'), summary: lines };
-    const out = (map[intent(q)] || []).filter((l) => l.tone !== 'muted');
+    const out = (map[forced || intent(q)] || []).filter((l) => l.tone !== 'muted');
     return out.length ? out : null;
   }
 

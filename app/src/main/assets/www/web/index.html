@@ -8,37 +8,16 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="app.css">
-<script>addEventListener("error", function (e) { document.documentElement.setAttribute("data-js-error", e.message + " @" + e.filename.split("/").pop() + ":" + e.lineno); });</script>
+<script>addEventListener("error", function (e) { document.documentElement.setAttribute("data-js-error", e.message + " @" + (e.filename || "").split("/").pop() + ":" + e.lineno); });</script>
 </head>
 <body>
 <a class="skip" href="#view">Skip to content</a>
-<div class="wrap">
-  <header class="top">
-    <button class="icon-btn" id="back" aria-label="Back" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <div class="mark" aria-hidden="true">🌾</div>
-    <div class="brand"><b>GramAI</b><small data-i18n="tagline"></small></div>
-    <button class="langchip" id="langbtn" aria-label="Language">OR</button>
-    <button class="icon-btn" id="askbtn" aria-label="Kisan Mitra" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></button>
-  </header>
-  <div class="netbar on" id="netbar" role="status" aria-live="polite"></div>
-  <div class="banner" id="pending" hidden>🛡️<span></span></div>
-  <main id="view"></main>
-  <footer class="foot">© GramAI · Chandra Shekhar</footer>
-</div>
-
+<header class="top" id="top"></header>
+<main id="view" class="app" aria-live="polite"></main>
 <nav class="bnav" id="bnav" aria-label="Main" hidden><div></div></nav>
-<section class="sheet-chat" id="chat" hidden aria-label="Kisan Mitra">
-  <div class="chat-h"><b data-i18n="expertTitle"></b><button class="icon-btn" id="chatx" aria-label="Close">✕</button></div>
-  <div class="chat-b" id="chatb"></div>
-  <form class="chat-f" id="chatf"><input id="chati" autocomplete="off" aria-label="Message"><button class="btn sm" data-i18n="send"></button></form>
-  <a class="btn ghost" id="wa" target="_blank" rel="noopener" data-i18n="expertWa"></a>
-</section>
+<div id="overlay"></div>
 
-<dialog class="welcome" id="welcome" aria-labelledby="wt">
-  <div class="wh"><div class="mark" aria-hidden="true">🌾</div><h2 id="wt">ଭାଷା ବାଛନ୍ତୁ</h2><p>भाषा चुनें · Tap your language</p></div>
-  <div class="pick" id="pick-lang"></div>
-</dialog>
-
+<script src="art.js"></script>
 <script src="logic.js"></script>
 <script src="summary.js"></script>
 <script src="llm.js"></script>
