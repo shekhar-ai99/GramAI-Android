@@ -34,7 +34,19 @@ const ic = (n, cls = '') => `<span class="ico ${cls}">${ICON[n] || ''}</span>`;
 const artEl = (id, cls = 'art') => `<span class="${cls}">${art(id)}</span>`;
 const itemName = (it) => t('n_' + it.id);
 const LOC = () => ({ or: 'or-IN', hi: 'hi-IN' }[L().code] || 'en-IN');
-const fmt = (iso, o = { day: 'numeric', month: 'short' }) => { try { return (typeof iso === 'string' ? G.parse(iso.slice(0, 10)) : iso).toLocaleDateString(LOC(), o); } catch { return iso; } };
+// Odia and Hindi names are spelled out here: phones and WebViews often lack those locales and fall back to English.
+const DN = { or: ['ରବିବାର', 'ସୋମବାର', 'ମଙ୍ଗଳବାର', 'ବୁଧବାର', 'ଗୁରୁବାର', 'ଶୁକ୍ରବାର', 'ଶନିବାର'], hi: ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'] };
+const MN = { or: ['ଜାନୁଆରୀ', 'ଫେବ୍ରୁଆରୀ', 'ମାର୍ଚ୍ଚ', 'ଅପ୍ରେଲ', 'ମଇ', 'ଜୁନ', 'ଜୁଲାଇ', 'ଅଗଷ୍ଟ', 'ସେପ୍ଟେମ୍ବର', 'ଅକ୍ଟୋବର', 'ନଭେମ୍ବର', 'ଡିସେମ୍ବର'], hi: ['जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'] };
+const fmtDate = (d, o = { day: 'numeric', month: 'short' }) => {
+  const c = L().code;
+  if (!DN[c]) return d.toLocaleDateString(LOC(), o);
+  return [o.weekday ? DN[c][d.getDay()] + (o.day || o.month ? ',' : '') : '', o.day ? d.getDate() : '', o.month ? MN[c][d.getMonth()] : ''].filter((x) => x !== '').join(' ');
+};
+const fmt = (iso, o = { day: 'numeric', month: 'short' }) => { try { return fmtDate(typeof iso === 'string' ? G.parse(iso.slice(0, 10)) : iso, o); } catch { return iso; } };
+// Read-aloud only when the phone has a voice for the chosen language: a wrong-language voice would be worse than none.
+const SPEECH = { or: 'or', hi: 'hi', en: 'en' };
+const canSpeak = () => 'speechSynthesis' in window && !!SPEECH[L().code] && (L().code === 'en' || speechSynthesis.getVoices().some((v) => v.lang.toLowerCase().startsWith(SPEECH[L().code])));
+const speak = (txt) => { const u = new SpeechSynthesisUtterance(txt); u.lang = LOC(); u.rate = 0.9; speechSynthesis.cancel(); speechSynthesis.speak(u); };
 const ago = (ts) => { const m = Math.round((Date.now() - ts) / 60000); return m < 1 ? '<1 min' : m < 60 ? m + ' min' : m < 1440 ? Math.round(m / 60) + ' h' : Math.round(m / 1440) + ' d'; };
 const monsoon = () => { const m = new Date().getMonth() + 1; return m >= 6 && m <= 9; };
 const online = () => !QA_OFFLINE && navigator.onLine !== false;
@@ -119,14 +131,14 @@ function nav(screen) {
 function back() { S.screen = S.stack.pop() || PARENT[S.screen] || 'today'; render(); scrollTo({ top: 0 }); }
 const setTheme = (m) => { m === 'auto' ? document.documentElement.removeAttribute('data-theme') : (document.documentElement.dataset.theme = m); store.set('agri.theme', m); };
 const setSize = (m) => { m === 'large' ? (document.documentElement.dataset.size = 'large') : document.documentElement.removeAttribute('data-size'); store.set('agri.size', m); };
-const LOGO = '<svg viewBox="0 0 24 24"><path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15M5 19c3-6 6-9 10-11"/></svg>';
+const LOGO = GramArt.MARK;
 const TITLES = { tips: 'tab_tips', schemes: 'tab_schemes', news: 'tab_news', store: 'tab_shop', mine: 'editFarm', settings: 'settings' };
 
 function renderTop() {
   const top = $('#top'), s = S.screen, sub = !!PARENT[s], onb = s === 'lang' || (s === 'pick' && !S.mine.length);
   if (onb) { top.hidden = true; top.innerHTML = ''; return; } top.hidden = false;
-  const chat = S.item && !sub ? `<button class="ibtn" id="askbtn" aria-label="${esc(t('expertTitle'))}">${ic('chat')}</button>` : '';
-  const lang = `<button class="langchip" id="langbtn" aria-label="${esc(t('language'))}">${esc(L().code.toUpperCase())}</button>`;
+  const chat = S.item && !sub ? `<button class="ibtn" id="askbtn" aria-label="${esc(t('expertTitle'))}">${ic('chat')}<span>${esc(t('ask'))}</span></button>` : '';
+  const lang = `<button class="langchip" id="langbtn" aria-label="${esc(t('language'))}">${esc(L().name)}</button>`;
   if (sub || s === 'pick') {
     top.innerHTML = `<button class="ibtn plain" id="backbtn" aria-label="${esc(t('back'))}">${ic('back')}</button><div class="page-title grow">${esc(noEmoji(t(TITLES[s] || 'editFarm')))}</div>${s === 'pick' ? '' : lang}`;
     $('#backbtn').onclick = () => (s === 'pick' ? back() : back());
@@ -189,12 +201,13 @@ SCREENS.today = async (v) => {
   const tips = await content('tips'), tl = tips[it.id] || (plant ? tips.plant : null) || tips.general || [], tip = tl.length ? tl[Math.floor(Date.now() / 864e5) % tl.length] : '';
   const sch = ((await getJSON('../languages/en/schemes.json')) || []).filter((s) => s.tags.includes(it.id) || s.tags.includes('all') || (!plant && s.tags.includes('animal')));
   const news = readNews(), nl = news?.sections?.[S.sector] || [], hl = nl[0] ? (nl[0].title[L().code] || nl[0].title.en) : '';
-  const today = new Date().toLocaleDateString(LOC(), { weekday: 'long', day: 'numeric', month: 'long' });
+  const today = fmtDate(new Date(), { weekday: 'long', day: 'numeric', month: 'long' });
   const heroCls = plant && lvl === 'no' ? 'bad' : plant && lvl === 'caution' ? 'warn' : '';
   const hero = d ? `<div class="hero ${heroCls} fade"><div class="row"><div class="grow"><span class="chipw">${esc(today)}</span>
       <div class="big" style="margin-top:10px">${plant ? esc(t(VLABEL[lvl])) : Math.round(d.tMax) + '°C'}</div>
       <div class="sub">${plant ? esc(t(REASON[tv.v.reason])) + (d.estimated ? ' · ' + esc(t('estimated')) : '') : esc(t('rain')) + ' ' + d.rainProb + '% · ' + Math.round(d.windMax) + ' km/h'}</div></div><span class="wxart">${wxIcon(d)}</span></div>
       <div class="row wrap"><span class="chipw">${Math.round(d.tMax)}° / ${Math.round(d.tMin)}°</span><span class="chipw">${esc(t('rain'))} ${d.rainProb}%</span><span class="chipw">${Math.round(d.windMax)} km/h</span></div>
+      ${plant && canSpeak() ? `<button class="chipw say" id="saytoday">${ic('sound')}${esc(t('listen'))}</button>` : ''}
       ${plant && lvl !== 'safe' && best ? `<div class="sub">${esc(t('bestDay'))}: <b>${esc(fmt(best.date, { weekday: 'short', day: 'numeric', month: 'short' }))}</b></div>` : ''}</div>` : '<div class="skel"></div>';
   let card = '';
   if (plant) {
@@ -217,6 +230,7 @@ SCREENS.today = async (v) => {
     ${tip ? `<div class="card flat"><div class="row">${ic('tips')}<span class="cap">${esc(t('tipOfDay'))}</span></div><p>${md(stripEmoji(tip))}</p></div>` : ''}
     <div class="card list">${liRow('sch', t('sumSchemes'), sch.slice(0, 2).map((s) => s.title).join(' · '), 'schemes')}${liRow('news', t('sumNews'), hl, 'news')}</div>`;
   bindSwitcher(v);
+  const st = $('#saytoday', v); if (st) st.onclick = () => speak([t(VLABEL[lvl]), t(REASON[tv.v.reason])].join('. '));
 };
 
 /* Scan + result */
@@ -244,7 +258,7 @@ async function showResult(out) {
   const id = S.result, r = await rec(id), classes = CLASSES[S.item.id]; if (!r) return;
   const healthy = id.endsWith('healthy'), pct = healthy ? 94 : 91, plant = S.sector === 'plant';
   out.innerHTML = `<div class="card fade"><div class="rhead"><div class="grow"><span class="pill ${healthy ? '' : 'bad'}">${ic(healthy ? 'check' : 'alert')}${esc(healthy ? t('healthy') : noEmoji(t('tab_diagnosis')))}</span> <span class="pill warn">${esc(t('demo'))}</span><h2>${esc(r.title)}</h2></div><div class="ring" id="ring"><div><span>${pct}%</span><small>${esc(t('sure'))}</small></div></div></div>
-      <div class="row wrap"><button class="btn sm" id="say" ${'speechSynthesis' in window && ['en', 'hi'].includes(L().code) ? '' : 'hidden'}>${ic('sound')}${esc(t('listen'))}</button><button class="togglechip" id="heat" aria-pressed="${S.heat}">${esc(t('focusArea'))}</button></div></div>
+      <div class="row wrap"><button class="btn sm" id="say" ${canSpeak() ? '' : 'hidden'}>${ic('sound')}${esc(t('listen'))}</button><button class="togglechip" id="heat" aria-pressed="${S.heat}">${esc(t('focusArea'))}</button></div></div>
     ${needEnglishNote()}
     <div class="card fade"><span class="cap">${esc(t('secOverview'))}</span><p>${md(r.overview)}</p>${r.immediate_steps ? `<div style="border-top:1px solid var(--line);padding-top:12px"><span class="cap">${esc(t('secNow'))}</span><p style="font-size:var(--fs-title);line-height:1.45">${md(r.immediate_steps)}</p></div>` : ''}</div>
     <div id="solhost"></div>
@@ -260,7 +274,7 @@ async function showResult(out) {
   drawSol();
   requestAnimationFrame(() => requestAnimationFrame(() => $('#ring', out).style.setProperty('--p', pct)));
   $('#heat', out).onclick = (e) => { S.heat = !S.heat; e.currentTarget.setAttribute('aria-pressed', S.heat); const f = $('#fnd'); f.querySelector('.heat')?.remove(); if (S.heat && f.querySelector('img')) f.insertAdjacentHTML('beforeend', '<div class="heat"></div>'); };
-  const say = $('#say', out); if (say) say.onclick = () => { const u = new SpeechSynthesisUtterance([r.title, r.immediate_steps].join('. ')); u.lang = L().code === 'hi' ? 'hi-IN' : 'en-IN'; speechSynthesis.cancel(); speechSynthesis.speak(u); };
+  const say = $('#say', out); if (say) say.onclick = () => speak([r.title, r.immediate_steps].join('. '));
   $$('[data-c]', out).forEach((b) => (b.onclick = () => { S.result = b.dataset.c; showResult(out); }));
 }
 
@@ -273,7 +287,7 @@ SCREENS.calendar = async (v) => {
   const body = $('#calbody', v);
   await ({ stages: calStages, harvest: calHarvest, vacc: calVacc, breed: calBreed }[cur])(body);
 };
-const monthsTxt = (ms) => ms.map((m) => new Date(2000, m - 1, 1).toLocaleString(LOC(), { month: 'short' })).join(' · ');
+const monthsTxt = (ms) => ms.map((m) => fmtDate(new Date(2000, m - 1, 1), { month: 'short' })).join(' · ');
 async function calStages(body) {
   const it = S.item, id = it.id, start = getStart(), stages = DATA.advisory.calendar.stages, label = id === 'paddy' ? 'startPaddy' : 'startSow';
   let html = `<div class="card">${dateField('start', label, start)}</div>`;

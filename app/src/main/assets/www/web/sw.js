@@ -1,6 +1,6 @@
 // GramAI service worker: makes the app load and work offline.
 // App shell + content: cache first, refreshed in the background. news.json: network first, cache as fallback.
-const V = 'gramai-v3';
+const V = 'gramai-v4';
 const SHELL = ['./', 'index.html', 'app.js', 'art.js', 'logic.js', 'summary.js', 'llm.js', 'app.css', 'i18n.json', 'icon.svg', 'manifest.webmanifest',
   'data/advisory.json', 'data/livestock.json', 'data/climate.json', 'data/harvest.json', 'data/news.json',
   '../languages/domain_config.json', '../languages/en/tips.json', '../languages/en/calendar.json', '../languages/en/schemes.json', '../languages/en/shop.json',
