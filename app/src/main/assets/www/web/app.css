@@ -188,3 +188,7 @@ a.newsi { display:block; text-decoration:none; color:inherit; } a.newsi b { disp
 .chipw.say { border:0; font:inherit; font-weight:700; display:inline-flex; align-items:center; gap:6px; min-height:44px; cursor:pointer; }
 .chipw.say .ico { width:20px; height:20px; }
 .hero .big { text-shadow:0 1px 2px rgba(0,0,0,.25); }
+
+/* Empty date fields show a visible prompt: some WebViews render a blank box with only a chevron */
+.field { position:relative; } .field .ph { position:absolute; left:14px; bottom:0; height:52px; display:flex; align-items:center; color:var(--ink2); font-weight:600; pointer-events:none; }
+.field input:valid ~ .ph { display:none; } .field input:invalid::-webkit-datetime-edit { color:transparent; }

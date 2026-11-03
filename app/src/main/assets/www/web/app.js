@@ -56,13 +56,16 @@ const needEnglishNote = () => L().code === 'en' ? '' : banner('info', 'info', es
 const verifyPill = (ok, key = 'verifyVet') => ok ? '' : `<div><span class="pill warn">${esc(t(key))}</span></div>`;
 const seg = (id, opts, cur) => `<div class="seg" id="${id}" role="group">${opts.map(([v, k]) => `<button data-v="${v}" aria-pressed="${cur === v}">${esc(t(k))}</button>`).join('')}</div>`;
 const bindSeg = (root, id, cb) => $$(`#${id} button`, root).forEach((b) => (b.onclick = () => cb(b.dataset.v)));
-const dateField = (id, labelKey, val) => `<label class="field"><span>${esc(t(labelKey))}</span><input type="date" id="${id}" value="${esc(val || '')}"></label>`;
+const dateField = (id, labelKey, val) => `<label class="field"><span>${esc(t(labelKey))}</span><input type="date" id="${id}" value="${esc(val || '')}" required><b class="ph">${esc(t('tapDate'))}</b></label>`;
 const liRow = (icon, title, sub, id, extra = '') => `<button class="li" data-go="${id}"><span class="lead">${ICON[icon]}</span><span class="grow"><b>${esc(title)}</b>${sub ? `<span class="muted">${esc(sub)}</span>` : ''}</span>${extra}<span class="chev ico">${ICON.chev}</span></button>`;
 
 /* ---------- data ---------- */
 async function content(name) {
   const key = L().dir + name; if (CONTENT[key]) return CONTENT[key];
-  let d = await getJSON(`../languages/${L().dir}/${name}.json`); if (!d) d = await getJSON(`../languages/en/${name}.json`);
+  let d = await getJSON(`../languages/${L().dir}/${name}.json`);
+  // The Odia calendar file is an older day-range format; the app needs month-based stages, so use English until it is rewritten.
+  if (name === 'calendar' && d && Object.values(d).some((l) => Array.isArray(l) && l.some((x) => !Array.isArray(x.months)))) d = null;
+  if (!d) d = await getJSON(`../languages/en/${name}.json`);
   return (CONTENT[key] = d || {});
 }
 async function rec(id) {
@@ -107,7 +110,7 @@ async function buildFacts() {
   const start = getStart(), m = new Date().getMonth() + 1;
   if (S.sector === 'plant') {
     if (it.id === 'paddy' && start) { const dat = G.daysBetween(G.parse(start), new Date()), st = G.stageFor(DATA.advisory.calendar.stages, dat); if (st) f.stage = { name: L().code === 'or' ? st.nameOd : st.name, dat, task: st.general }; }
-    else { const cal = (await content('calendar'))[it.id], cur = (cal || []).find((x) => x.months.includes(m)); if (cur) f.stage = { name: cur.stage, task: cur.task }; }
+    else { const cal = (await content('calendar'))[it.id], cur = (cal || []).find((x) => x.months?.includes(m)); if (cur) f.stage = { name: cur.stage, task: cur.task }; }
     if (start && DATA.harvest[it.id]) { const h = G.harvestWindow(start, DATA.harvest[it.id]); f.harvest = { from: fmt(h.from), to: fmt(h.to), daysToStart: h.daysToStart }; }
   } else {
     const live = DATA.livestock[it.id], age = +store.get('agri.age.' + it.id, '4'); f.animal = { vaccDue: live.vaccination.filter((v) => G.vaccineStatus(v, age).state === 'due').map((v) => v.what) };
@@ -217,7 +220,7 @@ SCREENS.today = async (v) => {
       const pct = Math.max(2, Math.min(100, Math.round(((dat - stages[0].datFrom) / (stages[stages.length - 1].datTo - stages[0].datFrom)) * 100)));
       card = st ? `<div class="card hl"><div class="row"><span class="cap grow">${esc(t('sumStage'))}</span><span class="pill">${esc(t('dayN'))} ${dat}</span></div><h2 style="font-size:var(--fs-h2)">${esc(L().code === 'or' ? st.nameOd : st.name)}</h2><div class="stagebar"><i style="width:${pct}%"></i></div><p>${esc(st.general)}</p>${nx ? `<p class="muted">› ${esc(L().code === 'or' ? nx.nameOd : nx.name)} · ${esc(fmt(nx.from))}</p>` : ''}</div>` : '';
     } else {
-      const cal = ((await content('calendar'))[it.id] || []).find((x) => x.months.includes(new Date().getMonth() + 1));
+      const cal = ((await content('calendar'))[it.id] || []).find((x) => x.months?.includes(new Date().getMonth() + 1));
       card = `<div class="card"><span class="cap">${esc(t('sumStage'))}</span>${cal ? `<h2 style="font-size:var(--fs-title)">${esc(stripEmoji(cal.stage))}</h2><p>${esc(cal.task)}</p>` : ''}<button class="btn sec sm" data-go="calendar">${ic('cal')}${esc(t(it.id === 'paddy' ? 'startPaddy' : 'startSow'))}</button></div>`;
     }
   } else {
@@ -301,7 +304,7 @@ async function calStages(body) {
   } else {
     const list = (await content('calendar'))[id] || [], m = new Date().getMonth() + 1;
     if (!start && id === 'paddy') html += `<p class="muted">${esc(t('enterDate'))}</p>`;
-    html += `<div class="timeline">${list.map((x) => { const now = x.months.includes(m); return `<div class="tl ${now ? 'now' : ''}"><b>${esc(stripEmoji(x.stage))}</b><span class="muted">${esc(monthsTxt(x.months))}${now ? ' · ' + esc(t('thisMonth')) : ''}</span><p>${esc(x.task)}</p></div>`; }).join('')}</div>`;
+    html += `<div class="timeline">${list.map((x) => { const now = x.months?.includes(m); return `<div class="tl ${now ? 'now' : ''}"><b>${esc(stripEmoji(x.stage))}</b><span class="muted">${esc(monthsTxt(x.months))}${now ? ' · ' + esc(t('thisMonth')) : ''}</span><p>${esc(x.task)}</p></div>`; }).join('')}</div>`;
   }
   body.innerHTML = html;
   $('#start', body).onchange = (e) => { store.set(startKey(), e.target.value); render(); };
@@ -376,7 +379,7 @@ SCREENS.settings = (v) => {
   v.innerHTML = `<div class="card"><span class="cap">${esc(t('language'))}</span><div class="chips">${LANGS.map((l) => `<button class="chip nopad" data-l="${l.code}" aria-pressed="${l.code === S.lang}">${l.name}</button>`).join('')}</div>${L().mt ? banner('', 'info', esc(L().name + ': machine translation, not yet checked by a native speaker.')) : L().ui ? '' : banner('', 'info', esc(L().name + ': translation is being prepared. Showing English for now.'))}</div>
     <div class="card"><span class="cap">${esc(t('textSize'))}</span>${seg('sizeseg', [['normal', 'sizeNormal'], ['large', 'sizeLarge']], size)}</div>
     <div class="card"><span class="cap">${esc(t('appearance'))}</span>${seg('themeseg', [['auto', 'themeAuto'], ['light', 'themeLight'], ['dark', 'themeDark']], theme)}</div>
-    <div class="card"><span class="cap">${esc(t('about'))}</span><p>${esc(t('aboutBody'))}</p><p class="muted">GramAI web 0.5</p></div>`;
+    <div class="card"><span class="cap">${esc(t('about'))}</span><p>${esc(t('aboutBody'))}</p><p class="muted">GramAI 0.5</p></div>`;
   $$('[data-l]', v).forEach((b) => (b.onclick = () => { setLang(b.dataset.l); render(); }));
   bindSeg(v, 'sizeseg', (m) => { setSize(m); render(); }); bindSeg(v, 'themeseg', (m) => { setTheme(m); render(); });
 };
