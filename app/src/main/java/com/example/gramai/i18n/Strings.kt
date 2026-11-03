@@ -4,7 +4,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 
 /** Every piece of fixed UI text. Result text (disease, remedy) comes from diseases.json. */
 data class Strings(
-    val tagline: String,
     val offline: String,
     val heroEyebrow: String,
     val heroTitle: String,
@@ -35,26 +34,10 @@ data class Strings(
     val unsureBody: String,
     val caution: String,
     val language: String,
-    val footer: String,
-    val navScan: String,
-    val navHistory: String,
-    val navSettings: String,
-    val historyTitle: String,
-    val deleteAll: String,
-    val settingsTitle: String,
-    val about: String,
-    val aboutBody: String,
-    val noHistory: String,
-    val resultStatus: String,
-    val retakeStatus: String,
-    val expertStatus: String,
-    val expertTitle: String,
-    val expertBody: String,
-    val expertBanner: String
+    val footer: String
 )
 
 private val En = Strings(
-    tagline = "AI for Village & Gram",
     offline = "Offline",
     heroEyebrow = "AI powered paddy & skin detection",
     heroTitle = "One photo, the right advice",
@@ -85,26 +68,10 @@ private val En = Strings(
     unsureBody = "The AI is not sure. Do not spray or treat yet. Take a clearer photo or ask an expert.",
     caution = "AI suggestion, not a diagnosis. Confirm with an expert before any treatment.",
     language = "Language",
-    footer = "AI for Health & Agriculture",
-    navScan = "Scan",
-    navHistory = "History",
-    navSettings = "Settings",
-    historyTitle = "History",
-    deleteAll = "Delete all",
-    settingsTitle = "Settings",
-    about = "About",
-    aboutBody = "GramAI works on your phone. Your photos stay on your phone.",
-    noHistory = "No checks yet",
-    resultStatus = "Result",
-    retakeStatus = "Retake",
-    expertStatus = "Expert",
-    expertTitle = "Ask an expert",
-    expertBody = "The AI is not sure. Do not spray or treat yet. Your case is saved on this phone and can be shared with an expert.",
-    expertBanner = "Do not treat until an expert replies"
+    footer = "AI for Health & Agriculture"
 )
 
 private val Or = Strings(
-    tagline = "ଗାଁ ଓ ଗ୍ରାମ ପାଇଁ AI",
     offline = "ଅଫଲାଇନ୍",
     heroEyebrow = "AI ଦ୍ୱାରା ଧାନ ଓ ଚର୍ମ ରୋଗ ଚିହ୍ନଟ",
     heroTitle = "ଧାନ ଓ ଚର୍ମ ରୋଗ ଚିହ୍ନଟ",
@@ -135,26 +102,10 @@ private val Or = Strings(
     unsureBody = "AI ନିଶ୍ଚିତ ନୁହେଁ। ଏବେ ଔଷଧ ଦିଅନ୍ତୁ ନାହିଁ। ସଫା ଫଟୋ ନିଅନ୍ତୁ କିମ୍ବା ବିଶେଷଜ୍ଞଙ୍କୁ ପଚାରନ୍ତୁ।",
     caution = "ଏହା AI ର ପରାମର୍ଶ, ନିଦାନ ନୁହେଁ। ଚିକିତ୍ସା ପୂର୍ବରୁ ବିଶେଷଜ୍ଞଙ୍କ ସହ ପରାମର୍ଶ କରନ୍ତୁ।",
     language = "ଭାଷା",
-    footer = "ସ୍ୱାସ୍ଥ୍ୟ ଓ କୃଷି ପାଇଁ AI",
-    navScan = "ସ୍କାନ",
-    navHistory = "ଇତିହାସ",
-    navSettings = "ସେଟିଂସ",
-    historyTitle = "ଇତିହାସ",
-    deleteAll = "ସବୁ ଡିଲିଟ୍ କରନ୍ତୁ",
-    settingsTitle = "ସେଟିଂସ",
-    about = "ବିଷୟରେ",
-    aboutBody = "GramAI ଆପଣଙ୍କ ଫୋନରେ ଚାଲେ। ଆପଣଙ୍କ ଫଟୋ ଫୋନରେ ହିଁ ରହେ।",
-    noHistory = "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ଯାଞ୍ଚ ନାହିଁ",
-    resultStatus = "ଫଳାଫଳ",
-    retakeStatus = "ପୁନଃ ଫଟୋ",
-    expertStatus = "ବିଶେଷଜ୍ଞ",
-    expertTitle = "ବିଶେଷଜ୍ଞଙ୍କୁ ପଚାରନ୍ତୁ",
-    expertBody = "AI ନିଶ୍ଚିତ ନୁହେଁ। ଏବେ ଔଷଧ ଦିଅନ୍ତୁ ନାହିଁ। ଆପଣଙ୍କ କେସ୍ ଏହି ଫୋନରେ ସଞ୍ଚିତ ଅଛି ଏବଂ ବିଶେଷଜ୍ଞଙ୍କ ସହ ସେୟାର କରାଯାଇପାରିବ।",
-    expertBanner = "ବିଶେଷଜ୍ଞଙ୍କ ଉତ୍ତର ପର୍ଯ୍ୟନ୍ତ ଚିକିତ୍ସା କରନ୍ତୁ ନାହିଁ"
+    footer = "ସ୍ୱାସ୍ଥ୍ୟ ଓ କୃଷି ପାଇଁ AI"
 )
 
 private val Hi = Strings(
-    tagline = "गाँव और ग्राम के लिए AI",
     offline = "ऑफ़लाइन",
     heroEyebrow = "AI से धान और त्वचा रोग की पहचान",
     heroTitle = "एक फ़ोटो, सही सलाह",
@@ -185,87 +136,17 @@ private val Hi = Strings(
     unsureBody = "AI को पक्का भरोसा नहीं है। अभी दवा न डालें। साफ़ फ़ोटो लें या विशेषज्ञ से पूछें।",
     caution = "यह AI का सुझाव है, निदान नहीं। इलाज से पहले विशेषज्ञ से पुष्टि करें।",
     language = "भाषा",
-    footer = "स्वास्थ्य और कृषि के लिए AI",
-    navScan = "स्कैन",
-    navHistory = "इतिहास",
-    navSettings = "सेटिंग्स",
-    historyTitle = "इतिहास",
-    deleteAll = "सब हटाएँ",
-    settingsTitle = "सेटिंग्स",
-    about = "जानकारी",
-    aboutBody = "GramAI आपके फ़ोन पर चलता है। आपकी फ़ोटो फ़ोन में ही रहती हैं।",
-    noHistory = "अभी तक कोई जाँच नहीं",
-    resultStatus = "नतीजा",
-    retakeStatus = "दोबारा",
-    expertStatus = "विशेषज्ञ",
-    expertTitle = "विशेषज्ञ से पूछें",
-    expertBody = "AI को पक्का भरोसा नहीं है। अभी दवा न डालें। आपका केस इस फ़ोन में सहेजा है और विशेषज्ञ को भेजा जा सकता है।",
-    expertBanner = "विशेषज्ञ के जवाब तक इलाज न करें"
+    footer = "स्वास्थ्य और कृषि के लिए AI"
 )
 
 /**
- * Santali (Ol Chiki). MACHINE TRANSLATED (Google Translate) and not yet reviewed
- * by a native speaker: do not ship to farmers before review. See docs/LANGUAGES.md.
- */
-private val Sat = Strings(
-    tagline = "ᱟᱹᱛᱩ ᱟᱨ ᱜᱽᱨᱟᱢ ᱞᱟᱹᱜᱤᱫ AI",
-    offline = "ᱚᱯᱷᱞᱟᱭᱤᱱ",
-    heroEyebrow = "ᱫᱟᱠᱟ ᱫᱟᱨᱮ ᱟᱨ ᱦᱟᱨᱛᱟ ᱨᱚᱜᱽ ᱵᱟᱰᱟᱭ ᱞᱟᱹᱜᱤᱫ AI",
-    heroTitle = "ᱢᱤᱫ ᱪᱤᱛᱟᱹᱨ, ᱴᱷᱤᱠ ᱥᱚᱞᱦᱟ",
-    chooseCheck = "ᱟᱢ ᱪᱮᱫ ᱵᱤᱱᱤᱰ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ?",
-    paddyTitle = "ᱫᱟᱠᱟ ᱫᱟᱨᱮ ᱨᱚᱜᱽ ᱧᱮᱞ",
-    skinTitle = "ᱦᱟᱨᱛᱟ ᱨᱚᱜᱽ ᱵᱤᱱᱤᱰ",
-    tip = "ᱥᱚᱞᱦᱟ: ᱛᱮᱡᱽᱞᱟᱝ ᱢᱟᱨᱥᱟᱞ ᱵᱮᱵᱷᱟᱨ ᱢᱮ᱾ ᱯᱷᱨᱟᱢ ᱢᱤᱫ ᱥᱟᱠᱟᱢ ᱥᱮ ᱢᱤᱫ ᱯᱮᱪ ᱛᱮ ᱯᱮᱨᱮᱡᱽ ᱢᱮ ᱾",
-    scanHintPaddy = "ᱢᱤᱫ ᱫᱟᱠᱟ ᱥᱟᱠᱟᱢ, ᱯᱷᱨᱟᱢ ᱯᱮᱨᱮᱡᱽ ᱢᱮ",
-    scanHintSkin = "ᱢᱤᱫ ᱦᱟᱨᱛᱟ ᱯᱮᱪ, ᱯᱷᱨᱟᱢ ᱯᱮᱨᱮᱡᱽ ᱢᱮ",
-    goodLight = "ᱱᱟᱯᱟᱭ ᱢᱟᱨᱥᱟᱞ",
-    holdSteady = "ᱛᱷᱤᱨ ᱥᱟᱵ ᱢᱮ",
-    camera = "ᱠᱮᱢᱮᱨᱟ",
-    gallery = "ᱜᱮᱞᱮᱨᱤ ᱠᱷᱚᱱ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
-    analyze = "ᱵᱤᱥᱲᱤ ᱢᱮ",
-    scanning = "ᱥᱠᱮᱱᱤᱝ...",
-    listen = "ᱟᱡᱚᱢ",
-    speed = "ᱡᱚᱨ ᱛᱮ",
-    retake = "ᱪᱤᱛᱟᱹᱨ ᱫᱚᱦᱲᱟ ᱦᱟᱛᱟᱣ ᱢᱮ",
-    share = "ᱜᱟᱹᱠᱷᱩᱲᱤᱭᱟᱹ ᱥᱟᱶ ᱦᱟᱹᱴᱤᱧ ᱢᱮ",
-    back = "ᱨᱩᱣᱮᱲ",
-    diagnosis = "ᱰᱟᱭᱜᱽᱱᱚᱥᱤᱥ",
-    unsure = "ᱵᱟᱹᱧ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱜᱮᱭᱟ",
-    retakePhoto = "ᱪᱤᱛᱟᱹᱨ ᱫᱚᱦᱲᱟ ᱦᱟᱛᱟᱣ ᱢᱮ",
-    sure = "ᱠᱷᱟᱹᱴᱤ",
-    reliable = "ᱟᱹᱰᱤ ᱯᱟᱹᱛᱭᱟᱹᱣᱟᱱ ᱚᱨᱡᱚ",
-    moderate = "ᱢᱚᱰᱟᱨᱮᱴ ᱟᱠᱩᱨᱮᱥᱤ",
-    unclear = "ᱪᱤᱛᱟᱹᱨ ᱫᱚ ᱵᱟᱝ ᱯᱩᱥᱴᱟᱹᱣ ᱟᱠᱟᱱᱟ ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱪᱤᱛᱟᱹᱨ ᱦᱟᱛᱟᱣ ᱢᱮ",
-    unsureBody = "AI ᱫᱚ ᱵᱟᱭ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱜᱮᱭᱟ ᱾ ᱱᱤᱛ ᱦᱚᱸ ᱟᱞᱚᱢ ᱥᱯᱨᱮᱭᱟ ᱟᱨ ᱟᱞᱚᱢ ᱴᱨᱤᱴᱟ᱾ ᱢᱤᱫ ᱯᱩᱥᱴᱟᱹᱣ ᱪᱤᱛᱟᱹᱨ ᱦᱟᱛᱟᱣ ᱢᱮ ᱟᱨᱵᱟᱝ ᱢᱤᱫ ᱜᱟᱹᱠᱷᱩᱲᱤᱭᱟᱹ ᱠᱩᱞᱤᱭᱮᱢ᱾",
-    caution = "AI ᱥᱚᱞᱦᱟ, ᱰᱟᱭᱜᱽᱱᱚᱥᱤᱥ ᱫᱚ ᱵᱟᱝ ᱾ ᱡᱟᱦᱟᱱ ᱪᱤᱠᱤᱥᱟ ᱢᱟᱲᱟᱝ ᱨᱮ ᱢᱤᱫ ᱜᱟᱹᱠᱷᱩᱲᱤᱭᱟᱹ ᱥᱟᱶ ᱴᱷᱟᱹᱣᱠᱟᱹᱭ ᱢᱮ᱾",
-    language = "ᱯᱟᱨᱥᱤ",
-    footer = "ᱦᱚᱲᱢᱚ ᱟᱨ ᱪᱟᱥ ᱠᱟᱹᱢᱤ ᱞᱟᱹᱜᱤᱫ AI",
-    navScan = "ᱥᱠᱮᱱ",
-    navHistory = "ᱱᱟᱜᱟᱢ",
-    navSettings = "ᱥᱮᱴᱤᱝ",
-    historyTitle = "ᱱᱟᱜᱟᱢ",
-    deleteAll = "ᱥᱟᱱᱟᱢ ᱰᱤᱞᱤᱴ ᱢᱮ",
-    settingsTitle = "ᱥᱮᱴᱤᱝ",
-    about = "ᱵᱟᱵᱚᱛ",
-    aboutBody = "ᱜᱽᱨᱟᱢᱮᱭ ᱟᱢᱟᱜ ᱯᱷᱚᱱ ᱨᱮ ᱠᱟᱹᱢᱤ ᱮᱫᱟᱭ ᱾ ᱟᱢᱟᱜ ᱯᱷᱚᱴᱚ ᱟᱢᱟᱜ ᱯᱷᱚᱱ ᱨᱮ ᱛᱟᱦᱮᱱᱟ ᱾",
-    noHistory = "ᱱᱤᱛ ᱦᱚᱸ ᱪᱮᱫ ᱪᱮᱠ ᱵᱟᱹᱱᱩᱜᱼᱟ",
-    resultStatus = "ᱚᱨᱡᱚ",
-    retakeStatus = "ᱫᱚᱦᱲᱟ ᱦᱟᱛᱟᱣ",
-    expertStatus = "ᱢᱟᱷᱤᱨ",
-    expertTitle = "ᱢᱤᱫ ᱜᱟᱹᱠᱷᱩᱲᱤᱭᱟᱹ ᱠᱩᱞᱤᱭᱮᱢ",
-    expertBody = "AI ᱫᱚ ᱵᱟᱭ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱜᱮᱭᱟ ᱾ ᱱᱤᱛ ᱦᱚᱸ ᱟᱞᱚᱢ ᱥᱯᱨᱮᱭᱟ ᱟᱨ ᱟᱞᱚᱢ ᱴᱨᱤᱴᱟ᱾ ᱟᱢᱟᱜ ᱠᱮᱥ ᱱᱚᱣᱟ ᱯᱷᱚᱱ ᱨᱮ ᱥᱟᱧᱪᱟᱣ ᱢᱮᱱᱟᱜᱼᱟ ᱟᱨ ᱢᱤᱫ ᱜᱟᱹᱠᱷᱩᱲᱤᱭᱟᱹ ᱥᱟᱶ ᱦᱟᱹᱴᱤᱧ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾",
-    expertBanner = "ᱢᱤᱫ ᱜᱟᱹᱠᱷᱩᱲᱤᱭᱟᱹ ᱛᱮᱞᱟ ᱵᱟᱝ ᱮᱢ ᱞᱮᱠᱷᱟᱱ ᱟᱞᱚᱢ ᱪᱤᱠᱤᱥᱟ"
-)
-
-/**
- * Ho has no machine translation available and no reviewed text yet, so they show English. Fill
+ * Santali and Ho have no reviewed UI text yet, so they show English. Fill
  * these in (with a native speaker's review) and set Language.hasUiText.
  */
 fun stringsFor(language: Language): Strings = when (language) {
     Language.ODIA -> Or
     Language.HINDI -> Hi
-    Language.SANTALI -> Sat
-    Language.ENGLISH, Language.HO -> En
+    Language.ENGLISH, Language.SANTALI, Language.HO -> En
 }
 
 val LocalStrings = staticCompositionLocalOf { En }

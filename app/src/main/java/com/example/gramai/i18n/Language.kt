@@ -15,19 +15,18 @@ enum class Language(
     val code: String,
     val nativeName: String,
     val ttsLocale: Locale?,
-    val reviewed: Boolean,
-    val machineTranslated: Boolean = false
+    val reviewed: Boolean
 ) {
     ODIA("or", "ଓଡ଼ିଆ", Locale("or", "IN"), reviewed = false),
     ENGLISH("en", "English", Locale("en", "IN"), reviewed = true),
     HINDI("hi", "हिन्दी", Locale("hi", "IN"), reviewed = false),
     // Ol Chiki script. Needs Noto Sans Ol Chiki bundled (older phones lack it).
-    SANTALI("sat", "ᱥᱟᱱᱛᱟᱲᱤ", null, reviewed = false, machineTranslated = true),
+    SANTALI("sat", "ᱥᱟᱱᱛᱟᱲᱤ", null, reviewed = false),
     // Script (Warang Citi vs Devanagari/Odia) is undecided, so the name is Latin for now.
     HO("hoc", "Ho", null, reviewed = false);
 
     /** True when the app has UI text written for this language (not the English fallback). */
-    val hasUiText: Boolean get() = this != HO
+    val hasUiText: Boolean get() = this == ODIA || this == ENGLISH || this == HINDI
 
     companion object {
         fun fromCode(code: String?): Language = values().firstOrNull { it.code == code } ?: ODIA

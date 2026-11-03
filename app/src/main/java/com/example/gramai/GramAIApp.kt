@@ -133,9 +133,6 @@ fun GramAIApp(viewModel: GramAIViewModel) {
     val prefs = remember { context.getSharedPreferences("gramai", android.content.Context.MODE_PRIVATE) }
     var language by remember { mutableStateOf(Language.fromCode(prefs.getString("lang", null))) }
     val s = stringsFor(language)
-    var tab by remember { mutableStateOf("scan") }
-    var history by remember { mutableStateOf(HistoryStore.load(prefs)) }
-    var showWelcome by remember { mutableStateOf(prefs.getString("lang", null) == null) }
 
     fun speakResult(flushId: String) {
         val engine = tts.value
@@ -156,8 +153,12 @@ fun GramAIApp(viewModel: GramAIViewModel) {
     val accentTile = if (mode == "skin") SkinClaySoft else PaddyGoldSoft
 
     CompositionLocalProvider(LocalStrings provides s) {
-    Column(Modifier.fillMaxSize().background(Cream).statusBarsPadding()) {
-    Box(modifier = Modifier.weight(1f)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Cream)
+            .statusBarsPadding()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -166,17 +167,19 @@ fun GramAIApp(viewModel: GramAIViewModel) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            AppHeader(tagline = s.tagline, offlineLabel = s.offline)
+            AppHeader(offlineLabel = s.offline)
 
-            if (tab == "history") {
-                HistoryScreen(history, s) { HistoryStore.clear(prefs); history = emptyList() }
-            } else if (tab == "settings") {
-                SettingsScreen(language, s) { language = it; prefs.edit().putString("lang", it.code).apply() }
+            LanguagePicker(
+                selected = language,
+                label = s.language,
+                onSelect = { language = it; prefs.edit().putString("lang", it.code).apply() }
+            )
+            if (!language.hasUiText) {
+                // Santali / Ho: no reviewed text yet. Be upfront rather than guess.
+                CautionBanner("${language.nativeName}: translation is being prepared. Showing English for now.")
             }
 
-            if (tab != "scan") {
-                // History / Settings drawn above
-            } else if (mode == null) {
+            if (mode == null) {
                 // ---------------- HOME ----------------
                 HeroCard(eyebrow = s.heroEyebrow, title = s.heroTitle)
                 Text(s.chooseCheck, style = MaterialTheme.typography.titleMedium, color = Ink)
@@ -275,8 +278,6 @@ fun GramAIApp(viewModel: GramAIViewModel) {
                                     resultEng = eng
                                     showResult = true
                                     isAnalyzing = false
-                                    val name = parseResult(eng).firstOrNull()?.second?.replace(Regex("\\s*\\(\\d+(\\.\\d+)?%\\)"), "") ?: ""
-                                    history = HistoryStore.add(prefs, HistoryItem(if (conf <= UNSURE_BELOW) s.unsure else name, conf.toInt(), if (conf <= UNSURE_BELOW) "bad" else "ok", mode ?: "paddy", System.currentTimeMillis()))
                                     if (autoPlay && conf > UNSURE_BELOW) speakResult("tts_auto_play")
                                 }
                             }
@@ -397,16 +398,6 @@ fun GramAIApp(viewModel: GramAIViewModel) {
             )
         }
     }
-    GramNavBar(tab, s) { tab = it }
-    }
-    }
-
-    if (showWelcome) {
-        WelcomeLanguageDialog { picked ->
-            language = picked
-            prefs.edit().putString("lang", picked.code).apply()
-            showWelcome = false
-        }
     }
 
     DisposableEffect(Unit) {
