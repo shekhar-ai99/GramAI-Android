@@ -1,0 +1,73 @@
+{
+  "paddy": [
+    { 
+      "months": [6, 7], 
+      "stage": "🌱 Nursery/Sowing (Kharif)", 
+      "task": "Best season to start. Treat seeds with salt water. Prepare raised nursery beds." 
+    },
+    { 
+      "months": [8, 9], 
+      "stage": "🌿 Tillering/Vegetative", 
+      "task": "Critical growth phase. Maintain 2-5cm water level. Apply first Urea top dressing." 
+    },
+    { 
+      "months": [10, 11], 
+      "stage": "🌾 Reproductive/Heading", 
+      "task": "Apply Potash. Monitor for Stem Borer and Blast. Keep water level low but consistent." 
+    },
+    { 
+      "months": [12], 
+      "stage": "🌾 Harvesting", 
+      "task": "Drain field 10 days before cutting. Harvest when 80% grains are golden." 
+    },
+    { 
+      "months": [1, 2, 3, 4, 5], 
+      "stage": "🚜 Off-Season/Summer", 
+      "task": "Deep summer ploughing to kill soil pests. Test soil health." 
+    }
+  ],
+  "wheat": [
+    { 
+      "months": [11, 12], 
+      "stage": "🌱 Sowing (Rabi)", 
+      "task": "Best time: Nov 1-15. Sow at 5cm depth. Pre-sowing irrigation (Palewa) is essential." 
+    },
+    { 
+      "months": [1, 2], 
+      "stage": "🌿 Vegetative/Jointing", 
+      "task": "Critical Irrigation (CRI) at 21 days is mandatory. Check for yellow rust." 
+    },
+    { 
+      "months": [3, 4], 
+      "stage": "🌾 Harvesting", 
+      "task": "Harvest when grain hardens and moisture is <20%. Thresh and store in dry bins." 
+    },
+    { 
+      "months": [5, 6, 7, 8, 9, 10], 
+      "stage": "🚜 Off-Season", 
+      "task": "Land preparation for next Kharif crop." 
+    }
+  ],
+  "millet": [
+    { 
+      "months": [6, 7], 
+      "stage": "🌱 Sowing (Kharif)", 
+      "task": "Best for Ragi/Bajra. Sow with onset of monsoon. spacing 25x10 cm." 
+    },
+    { 
+      "months": [8, 9], 
+      "stage": "🌿 Vegetative/Heading", 
+      "task": "Weeding and thinning (2 weeks after sowing) is crucial for yield." 
+    },
+    { 
+      "months": [10], 
+      "stage": "🌾 Harvesting", 
+      "task": "Harvest when earheads turn brown/yellow. Dry well before threshing." 
+    },
+    { 
+      "months": [11, 12, 1, 2, 3, 4, 5], 
+      "stage": "🚜 Off-Season", 
+      "task": "Apply organic manure. Plan for crop rotation with pulses." 
+    }
+  ]
+}

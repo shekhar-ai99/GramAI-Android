@@ -1,0 +1,36 @@
+{
+  "paddy": [
+    "💧 **Water Management:** Maintain 2-5 cm water level during reproductive stage.",
+    "🧪 **Zinc Deficiency:** If leaves turn rusty brown, apply Zinc Sulphate (25kg/ha).",
+    "🐛 **Pest Control:** Use pheromone traps (5/acre) to monitor Stem Borer.",
+    "🌾 **Harvest:** Harvest when 80% of grains turn golden yellow."
+  ],
+  "wheat": [
+    "🌱 **Sowing Depth:** Sow seeds at 4-5 cm depth for best germination.",
+    "💧 **Critical Irrigation:** Crown Root Initiation (CRI) stage (21 days after sowing) is most critical.",
+    "⚠️ **Yellow Rust:** If yellow powder appears on leaves, spray Propiconazole immediately.",
+    "🧪 **Fertilizer:** Apply Nitrogen in split doses (1/2 at sowing, 1/2 at first irrigation)."
+  ],
+  "millet": [
+    "☀️ **Climate:** Millets are drought-resistant; avoid water-logging.",
+    "🌱 **Spacing:** Maintain 25x10 cm spacing for optimal yield.",
+    "🐛 **Birds:** Bird scaring is essential during the grain filling stage."
+  ],
+  "cow": [
+    "💉 **Vaccination:** FMD vaccination is mandatory twice a year (Sept/March).",
+    "🥛 **Clean Milk:** Wash udder with potassium permanganate solution before milking.",
+    "🏠 **Housing:** Ensure dry, non-slippery floor to prevent hoof rotting.",
+    "🥗 **Diet:** Provide mineral mixture (50g/day) to improve milk quality."
+  ],
+  "goat": [
+    "🦠 **Deworming:** Deworm every 3 months before monsoon starts.",
+    "💉 **PPR Vaccine:** Ensure annual PPR vaccination for all goats above 3 months.",
+    "🌿 **Feed:** Green fodder (Subabul/Neem) should make up 50% of the diet.",
+    "🏠 **Shelter:** Raised platform housing prevents pneumonia and foot rot."
+  ],
+  "general": [
+    "🚜 **Soil Test:** Test soil every 3 years to save fertilizer costs.",
+    "🌦️ **Weather:** Check the 'Weather' tab before spraying any chemicals.",
+    "📜 **Insurance:** Insure your crops under PMFBY to protect against calamities."
+  ]
+}

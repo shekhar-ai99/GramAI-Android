@@ -1,0 +1,112 @@
+{
+  "_note": "Offline advisory content. Stage timing is approximate and varies by variety and season. Scheme and insurance details must be verified against official sources before each season and before release.",
+  "calendar": {
+    "crop": "Paddy (Rice)",
+    "stages": [
+      {
+        "id": "nursery",
+        "name": "Nursery preparation",
+        "nameOd": "ନର୍ସରି ପ୍ରସ୍ତୁତି",
+        "datFrom": -25,
+        "datTo": -1,
+        "general": "Prepare a raised nursery bed. Soak seed for 24 hours and drain.",
+        "organic": "Use well-rotted compost or FYM in the nursery bed. Treat seed with Trichoderma.",
+        "chemical": "Treat seed with a recommended fungicide as per the label. Apply basal fertilizer as advised by your KVK."
+      },
+      {
+        "id": "transplanting",
+        "name": "Transplanting",
+        "nameOd": "ରୋପଣ",
+        "datFrom": 0,
+        "datTo": 7,
+        "general": "Transplant 21 to 25 day old seedlings, 2 to 3 per hill. Keep 2 to 5 cm of standing water.",
+        "organic": "Apply compost or vermicompost in the main field before transplanting.",
+        "chemical": "Apply basal dose of DAP and potash as per soil test."
+      },
+      {
+        "id": "tillering",
+        "name": "Tillering",
+        "nameOd": "ଗଛ ଗୁଣନ",
+        "datFrom": 8,
+        "datTo": 35,
+        "general": "Control weeds early. Check for stem borer and leaf folder. Keep water level low.",
+        "organic": "Apply neem cake as basal. Use Azolla and hand-weed. Spray 3% neem oil if pests appear.",
+        "chemical": "Top-dress urea in split doses. Use herbicide only as per label and timing."
+      },
+      {
+        "id": "panicle_initiation",
+        "name": "Panicle initiation",
+        "nameOd": "ଶୀଷ ଗଠନ",
+        "datFrom": 36,
+        "datTo": 55,
+        "general": "Apply the second nitrogen dose. Keep field saturated. Scout for brown plant hopper.",
+        "organic": "Apply wood ash or potash-rich compost. Check for pests and remove affected plants.",
+        "chemical": "Apply remaining nitrogen and potash. Spray insecticide only if pest threshold is crossed."
+      },
+      {
+        "id": "flowering",
+        "name": "Flowering",
+        "nameOd": "ଫୁଲ ଫୁଟିବା",
+        "datFrom": 56,
+        "datTo": 80,
+        "general": "Avoid stress. Do not apply nitrogen now. Watch for blast and sheath blight.",
+        "organic": "Avoid extra nitrogen. Keep water in the field. Use neem-based sprays if needed.",
+        "chemical": "Apply fungicide only if disease is seen, and follow the label."
+      },
+      {
+        "id": "grain_filling",
+        "name": "Grain filling",
+        "nameOd": "ଦାନା ପୂରଣ",
+        "datFrom": 81,
+        "datTo": 105,
+        "general": "Keep the soil moist, but do not flood. Avoid spraying during rain or strong wind.",
+        "organic": "Keep field moist. Do not apply nitrogen.",
+        "chemical": "Avoid late spraying close to harvest. Follow the label's pre-harvest interval."
+      },
+      {
+        "id": "maturity_harvest",
+        "name": "Maturity and harvest",
+        "nameOd": "ପରିପକ୍ୱତା ଓ ଅମଳ",
+        "datFrom": 106,
+        "datTo": 130,
+        "general": "Drain the field 7 to 10 days before harvest. Dry grain to about 14% moisture.",
+        "organic": "Harvest when most grains are golden. Dry on clean sheets, not directly on dirt.",
+        "chemical": "Respect the pre-harvest interval for any sprays used."
+      }
+    ]
+  },
+  "schemes": [
+    {
+      "name": "PM-KISAN",
+      "summary": "Direct income support for eligible farmer families, paid in instalments to bank accounts.",
+      "portal": "https://pmkisan.gov.in",
+      "verifyNote": "Check current amount, eligibility and e-KYC status on the portal."
+    },
+    {
+      "name": "CM-KISAN (Odisha)",
+      "summary": "State income support for farmers in Odisha, paid alongside PM-KISAN.",
+      "portal": null,
+      "verifyNote": "Ask the local Krushi Bhawan or agriculture office for current eligibility and instalments."
+    },
+    {
+      "name": "KALIA (Odisha)",
+      "summary": "Odisha scheme for input support and livelihood assistance to small and marginal farmers.",
+      "portal": null,
+      "verifyNote": "Check current components and eligibility with the local agriculture office."
+    },
+    {
+      "name": "Kisan Credit Card (KCC)",
+      "summary": "Short-term credit for seed, fertilizer and other farm inputs through banks.",
+      "portal": null,
+      "verifyNote": "Apply through your bank or cooperative society."
+    }
+  ],
+  "insurance": {
+    "scheme": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "premium": "Farmer share for kharif food crops like paddy is a low fixed percentage of sum insured. The exact rate is set each season.",
+    "enrolment": "Enrol before the seasonal cut-off through your bank, a Common Service Centre, or the PMFBY portal. Keep your land records and bank details ready.",
+    "claim": "Report crop loss as early as possible. The scheme requires intimation within 72 hours of an event through the helpline, portal, app, or bank.",
+    "portal": "https://pmfby.gov.in",
+    "verifyNote": "Check the current season's premium rate, cut-off date and helpline on the portal before advising a farmer."
+  }
+}

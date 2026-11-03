@@ -1,0 +1,18 @@
+{
+  "plant": [
+    { "name": "Paddy", "icon": "🌾", "id": "paddy", "enabled": true },
+    { "name": "Wheat", "icon": "🌾", "id": "wheat", "enabled": true },
+    { "name": "Millet", "icon": "🌽", "id": "millet", "enabled": true },
+    { "name": "Tomato", "icon": "🍅", "id": "tomato", "enabled": false },
+    { "name": "Cauliflower", "icon": "🥦", "id": "cauliflower", "enabled": false },
+    { "name": "Sugarcane", "icon": "🍬", "id": "sugarcane", "enabled": false },
+    { "name": "Cotton", "icon": "☁️", "id": "cotton", "enabled": false }
+  ],
+  "animal": [
+    { "name": "Cow", "icon": "🐄", "id": "cow", "enabled": true },
+    { "name": "Goat", "icon": "🐐", "id": "goat", "enabled": true },
+    { "name": "Chicken", "icon": "🐔", "id": "chicken", "enabled": false },
+    { "name": "Fish", "icon": "🐟", "id": "fish", "enabled": false },
+    { "name": "Buffalo", "icon": "🐃", "id": "buffalo", "enabled": false }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "_note": "Draft livestock calendar. Items marked verified=false are common practice but were NOT confirmed against an official source: confirm with your local veterinarian or the Animal Husbandry department before relying on them.",
+  "cow": {
+    "vaccination": [
+      { "id": "deworm", "what": "Deworming before vaccination", "ageMonths": [3, 4], "repeat": "before each vaccination round", "note": "NADCP asks that animals are dewormed before vaccination.", "source": "NADCP operational guidelines (DAHD)", "verified": true },
+      { "id": "fmd_primary", "what": "FMD vaccine, first dose (calf)", "ageMonths": [4, 5], "repeat": "booster as advised, then every 6 months", "note": "FMD is given to all cattle and buffalo every 6 months under NADCP.", "source": "DAHD NADCP / LHDCP page", "verified": true },
+      { "id": "fmd_adult", "what": "FMD vaccine (adult cattle)", "ageMonths": [6, 999], "repeat": "every 6 months", "note": "Whole herd in the same round. Record the date and ear tag.", "source": "DAHD NADCP / LHDCP page", "verified": true },
+      { "id": "brucella", "what": "Brucellosis vaccine (female calves only)", "ageMonths": [4, 8], "repeat": "once in a lifetime", "note": "Female calves only. Do not give to adult animals or males.", "source": "NADCP operational guidelines (DAHD)", "verified": true },
+      { "id": "hs_bq", "what": "Haemorrhagic Septicaemia (HS) and Black Quarter (BQ)", "ageMonths": [6, 999], "repeat": "yearly, usually before the monsoon", "note": "Common practice before the rains. Timing not confirmed in this app: ask your vet for the local schedule.", "source": "not verified", "verified": false }
+    ],
+    "breeding": {
+      "heatCycleDays": 21, "heatCycleRange": [18, 24], "heatHours": 18,
+      "gestationDays": 283, "gestationRange": [279, 287],
+      "rebreedAfterCalvingDays": [60, 90],
+      "milestones": [
+        { "id": "return_heat", "dayFrom": 18, "dayTo": 24, "label": "Watch for return to heat", "note": "If she does not come back in heat, she may be pregnant.", "verified": true },
+        { "id": "preg_check", "dayFrom": 45, "dayTo": 60, "label": "Pregnancy check by a vet", "note": "Typical timing. Confirm with your vet.", "verified": false },
+        { "id": "dry_off", "dayFromEnd": 60, "label": "Dry period begins (stop milking)", "note": "About 60 days before calving is common. Confirm with your vet.", "verified": false },
+        { "id": "calving", "dayFromEnd": 0, "label": "Expected calving", "note": "Average 283 days. Range about 279 to 287.", "verified": true }
+      ],
+      "aiTip": { "text": "Heat lasts about 18 hours. Many farmers inseminate roughly 12 hours after the first signs of heat. Confirm timing with your AI worker.", "verified": false }
+    }
+  },
+  "goat": {
+    "vaccination": [
+      { "id": "deworm", "what": "Deworming before vaccination", "ageMonths": [3, 4], "repeat": "before each vaccination round", "note": "NADCP asks that animals are dewormed before vaccination.", "source": "NADCP operational guidelines (DAHD)", "verified": true },
+      { "id": "ppr", "what": "PPR vaccine", "ageMonths": [3, 3], "repeat": "repeat every 3 years", "note": "PPR is under a national eradication programme. Ask the local vet for the campaign dates.", "source": "CIRG goat health calendar; NIVEDI PPR programme", "verified": true },
+      { "id": "fmd_goat", "what": "FMD vaccine", "ageMonths": [3, 4], "repeat": "second dose 3-4 weeks later, then every 6 months", "note": "Small ruminants are included in the six-monthly FMD rounds.", "source": "CIRG goat health calendar; DAHD NADCP", "verified": true },
+      { "id": "et", "what": "Enterotoxaemia (ET) vaccine", "ageMonths": [3, 4], "repeat": "second dose 3-4 weeks later, then every 6 to 12 months", "note": "Commonly given before the rains when feed changes.", "source": "CIRG goat health calendar", "verified": true }
+    ],
+    "breeding": {
+      "heatCycleDays": 21, "heatCycleRange": [18, 24], "heatHours": 60,
+      "gestationDays": 150, "gestationRange": [148, 152],
+      "rebreedAfterCalvingDays": [60, 90],
+      "milestones": [
+        { "id": "return_heat", "dayFrom": 18, "dayTo": 24, "label": "Watch for return to heat", "note": "If she does not come back in heat, she may be pregnant.", "verified": true },
+        { "id": "preg_check", "dayFrom": 45, "dayTo": 60, "label": "Pregnancy check by a vet", "note": "Typical timing. Confirm with your vet.", "verified": false },
+        { "id": "late_feed", "dayFromEnd": 42, "label": "Give extra feed (last 6 weeks)", "note": "Most kid growth happens late. Confirm feed amounts with your vet.", "verified": false },
+        { "id": "kidding", "dayFromEnd": 0, "label": "Expected kidding", "note": "Average 150 days. Range about 148 to 152.", "verified": true }
+      ],
+      "aiTip": { "text": "Heat in goats lasts about 2 to 3 days. Ask your vet for the best mating time.", "verified": true }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "title": "PM-KISAN",
+    "benefit": "₹6,000 per year income support.",
+    "eligibility": "All landholding farmer families.",
+    "tags": ["all", "general"]
+  },
+  {
+    "title": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "benefit": "Crop insurance coverage for loss.",
+    "eligibility": "Farmers with notified crops.",
+    "tags": ["paddy", "wheat", "all"]
+  },
+  {
+    "title": "Kisan Credit Card (KCC)",
+    "benefit": "Low interest loans (4%) for farming.",
+    "eligibility": "Agriculture & Animal Husbandry.",
+    "tags": ["loan", "all"]
+  },
+  {
+    "title": "National Livestock Mission",
+    "benefit": "Subsidies for goat/sheep farming.",
+    "eligibility": "Livestock farmers.",
+    "tags": ["cow", "goat", "animal"]
+  }
+]

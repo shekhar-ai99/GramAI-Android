@@ -1,0 +1,72 @@
+{
+  "plant_paddy_brownspot": {
+    "title": "Paddy Brown Spot",
+    "symptoms": "Oval brown spots with gray/white centers on leaves. Causes grain discoloration.",
+    "organic_cure": "Spray Neem Oil (3%) or garlic extract. Improve soil silica.",
+    "chemical_cure": "Spray Mancozeb (2.5g/L) or Tricyclazole (0.6g/L).",
+    "prevention": "Use certified disease-free seeds and treat with hot water (52°C) for 10 mins."
+  },
+  "plant_paddy_blast": {
+    "title": "Rice Blast",
+    "symptoms": "Spindle-shaped lesions with white centers and reddish borders.",
+    "organic_cure": "Spray Pseudomonas fluorescens bacteria.",
+    "chemical_cure": "Spray Tricyclazole 75 WP (0.6 g/L) or Isoprothiolane.",
+    "prevention": "Avoid excessive Nitrogen fertilizer. Maintain field water level."
+  },
+  "plant_wheat_rust": {
+    "title": "Wheat Rust",
+    "symptoms": "Orange, powdery pustules on leaves/stems.",
+    "organic_cure": "Remove infected plants. Dust with sulfur powder.",
+    "chemical_cure": "Spray Propiconazole (1ml/L) or Tebuconazole.",
+    "prevention": "Plant resistant varieties like HD-2967."
+  },
+  "plant_millet_blast": {
+    "title": "Millet Blast (Ragi)",
+    "symptoms": "Diamond-shaped lesions on leaves and neck rot preventing grain filling.",
+    "organic_cure": "Spray Pseudomonas fluorescens (0.2%) at 50% flowering.",
+    "chemical_cure": "Spray Tricyclazole (0.6g/L) or Carbendazim (1g/L).",
+    "prevention": "Use resistant varieties like GPU-28. Sowing in July helps avoid peak blast."
+  },
+  "plant_millet_downy_mildew": {
+    "title": "Downy Mildew (Green Ear)",
+    "symptoms": "Leaves turn yellow/white (chlorosis). Earheads turn into leafy structures (Green Ear).",
+    "organic_cure": "Roguing (remove infected plants). Seed treatment with Trichoderma.",
+    "chemical_cure": "Spray Metalaxyl (2g/L) or Mancozeb.",
+    "prevention": "Crop rotation with pulses. Deep ploughing in summer."
+  },
+  "plant_millet_smut": {
+    "title": "Grain Smut",
+    "symptoms": "Grains are replaced by black powdery spore masses.",
+    "organic_cure": "Solar heat treatment of seeds.",
+    "chemical_cure": "Seed treatment with Carbendazim (2g/kg seed).",
+    "prevention": "Use clean, certified seeds. Remove smutted earheads carefully."
+  },
+  "animal_cow_lumpy": {
+    "title": "Lumpy Skin Disease (Cattle)",
+    "symptoms": "Nodules on skin, fever, reduced milk yield.",
+    "organic_cure": "Apply turmeric and aloe vera paste on nodules.",
+    "chemical_cure": "Administer antibiotics for secondary infection (Consult Vet).",
+    "prevention": "Goat Pox Vaccine is effective. Isolate infected cattle."
+  },
+  "animal_cow_healthy": {
+    "title": "Healthy Cow",
+    "symptoms": "No visible disease symptoms.",
+    "organic_cure": "Continue standard nutrition plan.",
+    "chemical_cure": "None required.",
+    "prevention": "Regular vaccination schedule."
+  },
+  "plant_paddy_healthy": {
+    "title": "Healthy Paddy",
+    "symptoms": "Crop looks vigorous and green.",
+    "organic_cure": "Apply organic manure as scheduled.",
+    "chemical_cure": "None required.",
+    "prevention": "Monitor for pests."
+  },
+  "unknown": {
+    "title": "Unknown / Unclear",
+    "symptoms": "Disease pattern not clearly recognized.",
+    "organic_cure": "Ensure clear photo.",
+    "chemical_cure": "Consult local officer.",
+    "prevention": "Take clearer photo."
+  }
+}

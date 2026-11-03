@@ -1,0 +1,64 @@
+{
+  "animal_cow_mastitis": {
+    "title": "Cow Mastitis",
+    "overview": "Mastitis is a bacterial infection of the udder causing swelling, clots in milk, fever, and reduced milk yield.",
+    "treatment_organic": "Wash udder with warm saline water 2–3 times daily. Apply turmeric + aloe vera paste externally. Use neem leaf warm compress for inflammation.",
+    "treatment_chemical": "Use intramammary antibiotics only as prescribed by a veterinarian. Anti-inflammatory injections may be required.",
+    "prevention": "Maintain clean housing, ensure proper milking hygiene, disinfect teats after milking, keep bedding dry.",
+    "immediate_steps": "Isolate the cow, stop using milk for consumption, call a vet immediately."
+  },
+
+  "animal_goat_healthy": {
+    "title": "Goat Healthy",
+    "overview": "No visible disease detected. The goat appears healthy based on the image.",
+    "treatment_organic": "",
+    "treatment_chemical": "",
+    "prevention": "Maintain balanced nutrition, provide clean drinking water, follow regular vaccination and deworming schedule.",
+    "immediate_steps": "Continue regular care and monitor the goat for unusual symptoms."
+  },
+
+  "animal_goat_ppr": {
+    "title": "Goat PPR (Peste des Petits Ruminants)",
+    "overview": "PPR is a highly contagious viral disease found in goats, causing fever, nasal discharge, mouth ulcers, diarrhea, and pneumonia.",
+    "treatment_organic": "Provide warm water, electrolytes, and herbal immunity boosters (giloy, tulsi). Maintain hydration and isolate the animal.",
+    "treatment_chemical": "No direct cure; treatment is supportive. Broad-spectrum antibiotics may be given by a vet to prevent secondary infections.",
+    "prevention": "Annual PPR vaccination, quarantine new animals for 15 days, disinfect housing regularly.",
+    "immediate_steps": "Isolate the sick goat immediately, provide electrolytes, contact a veterinarian urgently."
+  },
+
+  "plant_paddy_blast": {
+    "title": "Paddy Blast (Leaf Blast / Neck Blast)",
+    "overview": "Blast disease is caused by the fungus Magnaporthe oryzae. It creates diamond-shaped lesions and reduces yield drastically.",
+    "treatment_organic": "Spray neem oil extract, panchagavya, or fermented buttermilk. Remove infected leaves and improve airflow.",
+    "treatment_chemical": "Apply Tricyclazole, Carbendazim, or Propiconazole following agriculture department guidelines.",
+    "prevention": "Use resistant varieties, avoid excess nitrogen fertilizer, maintain proper field drainage.",
+    "immediate_steps": "Spray fungicide immediately in affected patches and inform local agriculture extension officer."
+  },
+
+  "plant_paddy_blight": {
+    "title": "Paddy Blight (Bacterial Leaf Blight)",
+    "overview": "Bacterial blight in rice is caused by Xanthomonas oryzae leading to yellowing and wilting of leaves.",
+    "treatment_organic": "Use cow urine extract foliar spray, apply fermented jaggery mixture, improve soil health.",
+    "treatment_chemical": "Copper-based bactericides like Copper Oxychloride or Streptocycline may be used as per recommendations.",
+    "prevention": "Use disease-free seeds, apply balanced nutrients, avoid water stagnation.",
+    "immediate_steps": "Remove infected clumps, improve field drainage, and spray bactericide if recommended locally."
+  },
+
+  "plant_paddy_brownspot": {
+    "title": "Paddy Brown Spot",
+    "overview": "Brown Spot is caused by Bipolaris oryzae and appears as circular brown lesions, often due to nutrient deficiency.",
+    "treatment_organic": "Apply neem cake, seaweed extract, or compost tea. Improve soil potassium levels organically.",
+    "treatment_chemical": "Use Mancozeb or Carbendazim-based fungicides based on severity.",
+    "prevention": "Use treated seeds, ensure good potassium fertilization, avoid drought stress.",
+    "immediate_steps": "Apply recommended fungicide and improve soil nutrient balance immediately."
+  },
+
+  "plant_paddy_tungro": {
+    "title": "Paddy Tungro Virus",
+    "overview": "Tungro is a viral disease spread by leafhoppers, causing orange-yellow discoloration, stunting, and reduced tillering.",
+    "treatment_organic": "Remove infected plants, use neem oil spray to suppress leafhopper activity.",
+    "treatment_chemical": "Apply insecticides like Imidacloprid, Thiamethoxam, or recommended alternatives for vector control.",
+    "prevention": "Use resistant varieties, synchronize planting, and control weeds that host leafhoppers.",
+    "immediate_steps": "Rogue out (remove) infected plants immediately and spray insecticide to control leafhoppers."
+  }
+}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="or">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e5a52">
+<title>GramAI · ଗ୍ରାମଏଆଇ</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#view">Skip to content</a>
+<div class="wrap">
+  <header class="top">
+    <button class="icon-btn" id="back" aria-label="Back" hidden>←</button>
+    <div class="mark" aria-hidden="true">🌾</div>
+    <div class="brand"><b>GramAI</b><small data-i18n="tagline"></small></div>
+    <button class="icon-btn" id="langbtn" aria-label="Language">🌐</button>
+    <button class="icon-btn" id="theme" aria-label="Light / dark">◐</button>
+  </header>
+  <div class="netbar on" id="netbar" role="status" aria-live="polite"></div>
+  <div class="banner" id="pending" hidden>🛡️<span></span></div>
+  <main id="view"></main>
+  <footer class="foot">© GramAI · Chandra Shekhar</footer>
+</div>
+
+<button class="fab" id="fab" aria-label="Kisan Mitra">👨‍🌾</button>
+<section class="sheet-chat" id="chat" hidden aria-label="Kisan Mitra">
+  <div class="chat-h"><b data-i18n="expertTitle"></b><button class="icon-btn" id="chatx" aria-label="Close">✕</button></div>
+  <div class="chat-b" id="chatb"></div>
+  <form class="chat-f" id="chatf"><input id="chati" autocomplete="off" aria-label="Message"><button class="btn sm" data-i18n="send"></button></form>
+  <a class="btn ghost" id="wa" target="_blank" rel="noopener" data-i18n="expertWa"></a>
+</section>
+
+<dialog class="welcome" id="welcome" aria-labelledby="wt">
+  <div class="wh"><div class="mark" aria-hidden="true">🌾</div><h2 id="wt">ଭାଷା ବାଛନ୍ତୁ</h2><p>भाषा चुनें · Tap your language</p></div>
+  <div class="pick" id="pick-lang"></div>
+</dialog>
+
+<script src="logic.js"></script>
+<script src="summary.js"></script>
+<script src="llm.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

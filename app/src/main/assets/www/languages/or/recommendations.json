@@ -1,0 +1,58 @@
+{
+  "animal_cow_mastitis": {
+    "title": "ଗାଈ ମାଷ୍ଟାଇଟିସ",
+    "overview": "Mastitis is an infection of the udder causing swelling, clotted milk, fever, and reduced milk output.",
+    "treatment_organic": "Wash udder with warm saline; apply turmeric + aloe vera paste; use neem warm compress twice daily.",
+    "treatment_chemical": "Consult a veterinarian for intramammary antibiotics and anti-inflammatory injections.",
+    "prevention": "Maintain strict milking hygiene, clean bedding, dry housing, and post-milking teat dipping.",
+    "immediate_steps": "Isolate the cow, discard milk safely, and consult a veterinarian immediately."
+  },
+  "animal_goat_healthy": {
+    "title": "ବାଁ ସ୍ୱସ୍ଥ",
+    "overview": "No disease symptoms detected. The goat appears healthy based on the uploaded image.",
+    "treatment_organic": "",
+    "treatment_chemical": "",
+    "prevention": "Maintain vaccination, clean shelter, proper nutrition, and regular deworming.",
+    "immediate_steps": "Continue daily care and monitor for any unusual symptoms."
+  },
+  "animal_goat_ppr": {
+    "title": "ବାଁରେ PPR",
+    "overview": "PPR is a contagious viral disease causing fever, mouth ulcers, nasal discharge, diarrhea, and pneumonia.",
+    "treatment_organic": "Provide warm water, electrolyte solution, and herbal immune boosters. Ensure isolation.",
+    "treatment_chemical": "No direct antiviral cure. Supportive care + vet-prescribed drugs to prevent secondary infections.",
+    "prevention": "Annual vaccination, quarantine new animals for 14 days, disinfect housing.",
+    "immediate_steps": "Isolate the goat immediately and contact a veterinarian urgently."
+  },
+  "plant_paddy_blast": {
+    "title": "ଧାନ ବ୍ଲାଷ୍ଟ",
+    "overview": "Caused by Magnaporthe oryzae, blast results in diamond-shaped lesions and severe yield losses.",
+    "treatment_organic": "Apply neem + garlic botanical extract; use fermented buttermilk spray; remove infected leaves.",
+    "treatment_chemical": "Spray Tricyclazole, Propiconazole, or Carbendazim per local guidelines.",
+    "prevention": "Use resistant varieties, avoid excess nitrogen, maintain moderate irrigation and good airflow.",
+    "immediate_steps": "Spray recommended fungicide and notify local agricultural extension."
+  },
+  "plant_paddy_blight": {
+    "title": "ଧାନ ବ୍ଲାଇଟ୍",
+    "overview": "Caused by Xanthomonas oryzae, leading to leaf drying, yellowing, and rapid crop decline.",
+    "treatment_organic": "Apply cow urine-based foliar spray or panchagavya; remove infected plants.",
+    "treatment_chemical": "Copper oxychloride or Streptocycline as recommended.",
+    "prevention": "Use disease-free seeds, maintain drainage, apply balanced nutrients.",
+    "immediate_steps": "Clear infected patches and consult local agri officer for bactericide use."
+  },
+  "plant_paddy_brownspot": {
+    "title": "ଧାନ ବ୍ରାଉନ୍ ସ୍ପଟ୍",
+    "overview": "Brown spot lesions appear due to Bipolaris oryzae and poor soil nutrition.",
+    "treatment_organic": "Use seaweed extract, compost tea; improve soil potassium organically.",
+    "treatment_chemical": "Spray Mancozeb or Carbendazim depending on severity.",
+    "prevention": "Ensure potassium-rich fertilization and use treated seeds.",
+    "immediate_steps": "Apply recommended fungicide and improve soil nutrient balance."
+  },
+  "plant_paddy_tungro": {
+    "title": "ଧାନ ଟାଙ୍ଗ୍ରୋ",
+    "overview": "Viral disease spread by leafhoppers causing orange discoloration, stunting, and low tillering.",
+    "treatment_organic": "Remove infected plants and use neem oil sprays to reduce vectors.",
+    "treatment_chemical": "Control leafhopper vectors with recommended insecticides (e.g., Imidacloprid).",
+    "prevention": "Use resistant varieties, synchronize planting, and manage weeds.",
+    "immediate_steps": "Rogue infected plants and spray for vector control immediately."
+  }
+}

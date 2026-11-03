@@ -1,39 +1,24 @@
 # GramAI Android
 
-Offline Android app that detects crop and skin diseases from a photo and gives remedies in Odia and English.
+Android app for GramAI: plant (paddy, wheat, millet) and animal (cow, goat) advisory for farmers, in Odia, English, Hindi, Santali (machine draft) and Ho (English fallback).
 
-- **Paddy (rice):** Bacterial Leaf Blight, Brown Spot, Leaf Blast, Tungro, Healthy
-- **Skin:** a separate model for common skin conditions (see the note below)
+## How it is built
+A thin native shell (Kotlin `WebView`) around the **GramAI web app**. The web app, its content and models are bundled in `app/src/main/assets/www` and served from a local https origin, so the app works offline and the Android and web versions cannot drift apart. The shell adds what a browser cannot do well: camera and gallery chooser, location permission (asked only when needed), system back handling, opening news links in the browser.
 
-All inference runs on the phone with PyTorch Mobile. No network connection is needed after install.
+The source of truth is the **GramAI-Web** repo (`web/`, `languages/`, `recommendations/`).
+
+## Update the bundled web app
+```
+scripts/sync_web_assets.sh /path/to/GramAI-Web
+./gradlew assembleDebug
+```
 
 ## Build
-
-Requirements: Android Studio (recent stable), JDK 17, Android SDK 34.
-
-1. Open this folder in Android Studio.
-2. Let Gradle sync.
-3. Run the `app` configuration on a device or emulator (Android 8.0 / API 26 or newer, arm64 or armeabi-v7a).
-
-## Project layout
-
-- `app/src/main/java/com/example/gramai/` - Kotlin source (UI, ViewModel, file helpers)
-- `app/src/main/assets/` - TorchScript models (`paddy_model_std.pt`, `skin_model_std.pt`) and `diseases.json`
-- `app/src/main/assets/diseases.json` - class names, Odia and English remedies, dosages, and warnings
-
-## Models
-
-| File | Purpose | Classes |
-|------|---------|---------|
-| `paddy_model_std.pt` | Paddy leaf disease | See `diseases.json` (`paddy.classes`) |
-| `skin_model_std.pt` | Skin condition | See `diseases.json` (`skin.classes`) |
-
-Class order in `diseases.json` must match the output order of each model. Check this whenever a model is retrained.
-
-## Medical disclaimer
-
-Results are AI predictions. Always confirm paddy treatment with an agriculture expert, and see a doctor for any skin condition.
+Android Studio (recent), JDK 17, Android SDK 34. Minimum Android 8.0 (API 26). Debug APK is about 3.4 MB.
 
 ## Status
-
-Early development. Known gaps: no automated tests yet, and the wrong-category (plant vs skin) check is not active on Android.
+- Verified on an Android 14 (arm64) emulator: language, sector, crop, photo from gallery, analysis (demo result), organic and non-organic options, 10-day weather sync.
+- Diagnosis is a **demo** until the model is wired in (see GramAI-Web).
+- Bundled news is a snapshot until a hosted news URL is configured (`window.GRAM_NEWS_URL`).
+- Package id is still `com.example.gramai`: change it before any store release.
+- The older PyTorch paddy and skin app is in the git history (before this branch). Skin (human health) is out of scope.

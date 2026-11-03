@@ -1,0 +1,27 @@
+{
+  "paddy": [
+    {"name": "Hybrid Paddy Seeds (5kg)", "price": "₹450", "img": "🌱", "link": "#"},
+    {"name": "Urea Fertilizer (50kg)", "price": "₹266", "img": "🧪", "link": "#"},
+    {"name": "Iron Sickle", "price": "₹120", "img": "🪓", "link": "#"},
+    {"name": "Pesticide Sprayer", "price": "₹1200", "img": "🚿", "link": "#"}
+  ],
+  "wheat": [
+    {"name": "HD-2967 Wheat Seeds", "price": "₹800", "img": "🌾", "link": "#"},
+    {"name": "Zinc Sulphate (1kg)", "price": "₹350", "img": "⚡", "link": "#"},
+    {"name": "Harvester Rental (1hr)", "price": "₹1500", "img": "🚜", "link": "#"}
+  ],
+  "millet": [
+    {"name": "Ragi Seeds (Certified)", "price": "₹300", "img": "🌽", "link": "#"},
+    {"name": "Bio-Fertilizer", "price": "₹450", "img": "🍂", "link": "#"},
+    {"name": "Bird Netting", "price": "₹1000", "img": "🕸️", "link": "#"}
+  ],
+  "cow": [
+    {"name": "Calcium Tonic (1L)", "price": "₹150", "img": "🥛", "link": "#"},
+    {"name": "Steel Milking Bucket", "price": "₹400", "img": "🪣", "link": "#"},
+    {"name": "Cattle Feed (20kg)", "price": "₹900", "img": "🍲", "link": "#"}
+  ],
+  "goat": [
+    {"name": "Deworming Tablet", "price": "₹50", "img": "💊", "link": "#"},
+    {"name": "Goat Feed Mix", "price": "₹600", "img": "🥣", "link": "#"}
+  ]
+}

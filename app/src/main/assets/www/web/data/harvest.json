@@ -1,0 +1,6 @@
+{
+  "_note": "Approximate days from sowing (or transplanting for paddy) to harvest. Varies a lot by variety, season and weather: confirm with your KVK. Paddy uses the stage table in advisory.json; wheat and millet values are typical ranges that were not verified in this app.",
+  "paddy": { "from": "transplanting", "daysFrom": 106, "daysTo": 130, "verified": true, "source": "advisory.json (maturity stage, days after transplanting)" },
+  "wheat":  { "from": "sowing", "daysFrom": 120, "daysTo": 150, "verified": false, "source": "typical range, confirm with KVK" },
+  "millet": { "from": "sowing", "daysFrom": 100, "daysTo": 130, "verified": false, "source": "typical range (finger millet), confirm with KVK" }
+}

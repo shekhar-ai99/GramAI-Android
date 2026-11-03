@@ -1,0 +1,18 @@
+{
+  "_note": "Approximate monthly climate for Odisha (Bhubaneswar region), used ONLY when there is no internet and no saved forecast. Rounded estimates from general climate knowledge, not official IMD normals: treat as a rough guide.",
+  "region": "Bhubaneswar, Odisha",
+  "months": {
+    "1":  { "tMax": 28, "tMin": 16, "rainDayProb": 0.03, "rainMm": 6,  "windMax": 12 },
+    "2":  { "tMax": 31, "tMin": 19, "rainDayProb": 0.05, "rainMm": 6,  "windMax": 13 },
+    "3":  { "tMax": 35, "tMin": 23, "rainDayProb": 0.07, "rainMm": 6,  "windMax": 14 },
+    "4":  { "tMax": 37, "tMin": 26, "rainDayProb": 0.10, "rainMm": 7,  "windMax": 15 },
+    "5":  { "tMax": 37, "tMin": 27, "rainDayProb": 0.17, "rainMm": 9,  "windMax": 16 },
+    "6":  { "tMax": 34, "tMin": 26, "rainDayProb": 0.40, "rainMm": 12, "windMax": 16 },
+    "7":  { "tMax": 31, "tMin": 25, "rainDayProb": 0.63, "rainMm": 15, "windMax": 15 },
+    "8":  { "tMax": 31, "tMin": 25, "rainDayProb": 0.63, "rainMm": 16, "windMax": 14 },
+    "9":  { "tMax": 32, "tMin": 25, "rainDayProb": 0.53, "rainMm": 14, "windMax": 13 },
+    "10": { "tMax": 31, "tMin": 23, "rainDayProb": 0.30, "rainMm": 14, "windMax": 12 },
+    "11": { "tMax": 29, "tMin": 19, "rainDayProb": 0.07, "rainMm": 8,  "windMax": 11 },
+    "12": { "tMax": 27, "tMin": 16, "rainDayProb": 0.03, "rainMm": 5,  "windMax": 11 }
+  }
+}
