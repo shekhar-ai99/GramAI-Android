@@ -10,7 +10,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -86,7 +93,7 @@ fun StatusPill(text: String, container: Color, content: Color, modifier: Modifie
 
 /** App mark + name, with the offline badge on the right. */
 @Composable
-fun AppHeader(offlineLabel: String, modifier: Modifier = Modifier) {
+fun AppHeader(tagline: String, offlineLabel: String, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -98,7 +105,7 @@ fun AppHeader(offlineLabel: String, modifier: Modifier = Modifier) {
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text("GramAI", style = MaterialTheme.typography.titleLarge, color = Ink)
-            Text("ଗ୍ରାମଏଆଇ", style = MaterialTheme.typography.labelSmall, color = InkSoft)
+            Text(tagline, style = MaterialTheme.typography.labelSmall, color = InkSoft)
         }
         StatusPill("⚡ $offlineLabel", BrandSoft, BrandDark)
     }
@@ -197,6 +204,10 @@ fun SectionCard(label: String, body: String, modifier: Modifier = Modifier) {
 /** Circular "91% sure" gauge. */
 @Composable
 fun ConfidenceRing(percent: Float, sureLabel: String, modifier: Modifier = Modifier) {
+    // Sweep up from empty each time a new result appears.
+    var target by remember { mutableStateOf(0f) }
+    LaunchedEffect(percent) { target = percent }
+    val shown by animateFloatAsState(target, animationSpec = tween(1100), label = "ring")
     val color = when {
         percent >= 80f -> Brand
         percent >= 60f -> PaddyGold
@@ -215,7 +226,7 @@ fun ConfidenceRing(percent: Float, sureLabel: String, modifier: Modifier = Modif
                 topLeft = Offset(inset, inset), size = arcSize, style = Stroke(stroke)
             )
             drawArc(
-                color = color, startAngle = -90f, sweepAngle = 360f * (percent / 100f).coerceIn(0f, 1f),
+                color = color, startAngle = -90f, sweepAngle = 360f * (shown / 100f).coerceIn(0f, 1f),
                 useCenter = false, topLeft = Offset(inset, inset), size = arcSize,
                 style = Stroke(stroke, cap = StrokeCap.Round)
             )
@@ -336,6 +347,31 @@ fun LanguagePicker(
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp
                     )
+                }
+            }
+        }
+    }
+}
+
+/** First-launch sheet: pick a language before anything else. Odia is listed first. */
+@Composable
+fun WelcomeLanguageDialog(onPick: (com.example.gramai.i18n.Language) -> Unit) {
+    androidx.compose.ui.window.Dialog(onDismissRequest = {}) {
+        Column(
+            Modifier
+                .clip(RoundedCornerShape(32.dp))
+                .background(Cream)
+                .padding(22.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text("ଭାଷା ବାଛନ୍ତୁ · भाषा चुनें · Choose language", style = MaterialTheme.typography.titleLarge, color = Ink)
+            Spacer(Modifier.height(6.dp))
+            com.example.gramai.i18n.Language.values().forEach { lang ->
+                GramCard(onClick = { onPick(lang) }) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(lang.nativeName, style = MaterialTheme.typography.titleMedium, color = Ink, modifier = Modifier.weight(1f))
+                        if (!lang.hasUiText) Text("English for now", style = MaterialTheme.typography.labelSmall, color = InkSoft)
+                    }
                 }
             }
         }
