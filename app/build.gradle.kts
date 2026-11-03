@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.gramai"
+    namespace = "app.gramai"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.gramai" // TODO: real app id before any store release
+        applicationId = "app.gramai"
         minSdk = 26
         targetSdk = 34
         versionCode = 2

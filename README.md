@@ -20,5 +20,5 @@ Android Studio (recent), JDK 17, Android SDK 34. Minimum Android 8.0 (API 26). D
 - Verified on an Android 14 (arm64) emulator: language, sector, crop, photo from gallery, analysis (demo result), organic and non-organic options, 10-day weather sync.
 - Diagnosis is a **demo** until the model is wired in (see GramAI-Web).
 - Bundled news is a snapshot until a hosted news URL is configured (`window.GRAM_NEWS_URL`).
-- Package id is still `com.example.gramai`: change it before any store release.
+- Package id is `app.gramai` (set before store release; confirm the final id before publishing).
 - The older PyTorch paddy and skin app is in the git history (before this branch). Skin (human health) is out of scope.

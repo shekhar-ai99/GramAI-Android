@@ -1,4 +1,4 @@
-package com.example.gramai
+package app.gramai
 
 import android.Manifest
 import android.annotation.SuppressLint
