@@ -200,6 +200,19 @@ fun GramAIApp(viewModel: GramAIViewModel) {
                     }
                 }
 
+                Spacer(Modifier.height(16.dp))
+                Button(
+                    onClick = { mode = "advisory" },
+                    modifier = Modifier.fillMaxWidth().height(65.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF9A825))
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("🗓 Farm Advisory (Offline)", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text("ଖେତ ପରାମର୍ଶ · ପାଣିପାଗ · ଯୋଜନା · ବୀମା", fontSize = 12.sp, color = Color.Black.copy(alpha = 0.8f))
+                    }
+                }
+
                 Spacer(Modifier.height(40.dp))
                 Card(
                     colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0)),
@@ -524,6 +537,11 @@ fun GramAIApp(viewModel: GramAIViewModel) {
             }
 
             Spacer(Modifier.height(20.dp))
+        }
+
+        // FARM ADVISORY OVERLAY (offline weather, crop stage, schemes, insurance)
+        if (mode == "advisory") {
+            com.example.gramai.advisory.AdvisoryScreen(onBack = { mode = null })
         }
     }
 
