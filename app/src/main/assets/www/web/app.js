@@ -3,6 +3,7 @@
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const store = { get: (k, d) => { try { return localStorage.getItem(k) ?? d; } catch { return d; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const QA_OFFLINE = new URLSearchParams(location.search).has('offline'); // QA: behave as if there is no network
 const LANGS = [
   { code: 'or', name: 'ଓଡ଼ିଆ', dir: 'or', ui: true }, { code: 'en', name: 'English', dir: 'en', ui: true }, { code: 'hi', name: 'हिन्दी', dir: 'en', ui: true },
   { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ', dir: 'en', ui: true, mt: true }, { code: 'hoc', name: 'Ho', dir: 'en', ui: false } ];
@@ -16,6 +17,7 @@ const FEATURES = {
 const t = (k) => I18N[S.lang]?.[k] || I18N.en?.[k] || k;
 const L = () => LANGS.find(l => l.code === S.lang) || LANGS[0];
 const getJSON = async (p) => { try { const r = await fetch(p); return r.ok ? await r.json() : null; } catch { return null; } };
+const ICON = {"camera": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 8h3l2-2h6l2 2h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z\"/><circle cx=\"12\" cy=\"13\" r=\"3.5\"/></svg>", "today": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M9 6h11M9 12h11M9 18h11\"/><path d=\"M3.5 6l1.2 1.2L6.8 5M3.5 12l1.2 1.2L6.8 11M3.5 18l1.2 1.2L6.8 17\"/></svg>", "cal": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 10h18M8 3v4M16 3v4\"/></svg>", "wx": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6.5 18a4 4 0 0 1-.6-7.96A6 6 0 0 1 17.4 9 4.5 4.5 0 0 1 17 18z\"/></svg>", "more": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"5\" cy=\"12\" r=\"1.7\" fill=\"currentColor\"/><circle cx=\"12\" cy=\"12\" r=\"1.7\" fill=\"currentColor\"/><circle cx=\"19\" cy=\"12\" r=\"1.7\" fill=\"currentColor\"/></svg>", "chat": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 5h16v11H9l-5 4z\"/></svg>", "back": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M15 5l-7 7 7 7\"/></svg>", "tips": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z\"/></svg>", "sch": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 10l9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18\"/></svg>", "news": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"2\"/><path d=\"M8 9h8M8 13h8M8 17h5\"/></svg>", "shop": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 7h14l-1.5 11a2 2 0 0 1-2 1.7h-7a2 2 0 0 1-2-1.7zM9 7a3 3 0 0 1 6 0\"/></svg>", "set": "<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 7h10M18 7h2M4 17h2M10 17h10\"/><circle cx=\"16\" cy=\"7\" r=\"2\"/><circle cx=\"8\" cy=\"17\" r=\"2\"/></svg>"};
 const noEmoji = (s) => String(s || '').replace(/^[^\p{L}\p{N}]+/u, '').trim();
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const md = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
@@ -44,8 +46,8 @@ function setLang(code) { S.lang = code; store.set('agri.lang', code); applyI18n(
 function go(state) { Object.assign(S, state); render(); scrollTo({ top: 0 }); }
 $('#back').onclick = () => { if (S.item) go({ item: null, result: null, photo: null, tab: 'diag' }); else go({ sector: null }); };
 $('#langbtn').onclick = () => $('#welcome').showModal();
-$('#theme').onclick = () => { const dark = matchMedia('(prefers-color-scheme: dark)').matches, cur = document.documentElement.dataset.theme || (dark ? 'dark' : 'light'); const n = cur === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = n; store.set('agri.theme', n); };
-{ const th = store.get('agri.theme', null); if (th) document.documentElement.dataset.theme = th; }
+const setTheme = (m) => { m === 'auto' ? document.documentElement.removeAttribute('data-theme') : (document.documentElement.dataset.theme = m); store.set('agri.theme', m); };
+{ const th = store.get('agri.theme', 'auto'); if (th !== 'auto') document.documentElement.dataset.theme = th; }
 
 /* Keep the sticky tab row exactly below the sticky header, whatever its height */
 const fitHeader = () => { const h = $('.top'); if (h) document.documentElement.style.setProperty('--hdr', h.offsetHeight + 'px'); };
@@ -54,7 +56,7 @@ addEventListener('resize', fitHeader); addEventListener('load', fitHeader);
 /* ---------- views ---------- */
 async function render() {
   fitHeader();
-  const v = $('#view'); v.className = 'view'; $('#back').hidden = !S.sector; $('#fab').hidden = !S.item;
+  const v = $('#view'); v.className = 'view'; $('#back').hidden = !S.sector; $('#askbtn').hidden = !S.item; $('#bnav').hidden = !S.item; $('#langbtn').textContent = L().code.toUpperCase();
   if (!S.sector) return renderSector(v);
   if (!S.item) return renderItems(v);
   return renderDash(v);
@@ -71,15 +73,29 @@ function renderItems(v) {
     `<button class="card item ${it.enabled ? '' : 'off'}" data-id="${it.id}" ${it.enabled ? '' : 'aria-disabled="true"'}>${it.enabled ? '' : `<span class="tag">${esc(t('comingSoon'))}</span>`}<span class="e">${it.icon}</span><b>${esc(itemName(it))}</b>${itemName(it) !== it.name ? `<small>${esc(it.name)}</small>` : ''}</button>`).join('')}</div>`;
   $$('.item', v).forEach(b => b.onclick = () => { const it = list.find(x => x.id === b.dataset.id); if (it.enabled) go({ item: it, tab: 'diag', result: null, photo: null }); });
 }
-const TABS = [['diag', 'tab_diagnosis'], ['sum', 'tab_summary'], ['tips', 'tab_tips'], ['cal', 'tab_calendar'], ['wx', 'tab_weather'], ['sch', 'tab_schemes'], ['shop', 'tab_shop'], ['news', 'tab_news']];
-async function renderDash(v) {
-  const it = S.item;
-  v.innerHTML = `<div class="row"><div class="mark" style="background:${S.sector === 'animal' ? 'var(--clay-soft)' : 'var(--gold-soft)'}">${it.icon}</div><div><h1 class="page" style="margin:0">${esc(itemName(it))}</h1><p class="muted">${esc(t('dashboard_title'))}</p></div></div>
-    <div class="chiprow" role="tablist">${TABS.map(([id, k]) => `<button role="tab" aria-selected="${S.tab === id}" data-t="${id}">${esc(t(k) || k)}</button>`).join('')}</div><div id="tabbody" class="stack"></div>`;
-  $$('[data-t]', v).forEach(b => b.onclick = () => { S.tab = b.dataset.t; renderDash(v); });
-  const body = $('#tabbody', v); const fn = { diag: tabDiag, sum: tabSummary, tips: tabTips, cal: tabCal, sch: tabSch, news: tabNews, wx: tabWx, shop: tabShop }[S.tab]; await fn(body);
+const NAV = [['diag', 'camera', 'tab_diagnosis'], ['sum', 'today', 'today'], ['cal', 'cal', 'tab_calendar'], ['wx', 'wx', 'tab_weather'], ['more', 'more', 'more']];
+const MORE = [['tips', 'tips', 'tab_tips'], ['sch', 'sch', 'tab_schemes'], ['news', 'news', 'tab_news'], ['shop', 'shop', 'tab_shop']];
+const navOf = (tab) => MORE.some(m => m[0] === tab) ? 'more' : tab;
+function drawNav() {
+  const nav = $('#bnav > div'); const cur = navOf(S.tab);
+  nav.innerHTML = NAV.map(([id, ic, k]) => `<button data-n="${id}" ${cur === id ? 'aria-current="page"' : ''}>${ICON[ic]}<span>${esc(noEmoji(t(k)))}</span></button>`).join('');
+  $$('[data-n]', nav).forEach(b => b.onclick = () => { S.tab = b.dataset.n; renderDash($('#view')); scrollTo({ top: 0 }); });
 }
-const soon = (b) => b.innerHTML = `<div class="card"><span class="pill warn">${esc(t('comingSoon'))}</span></div>`;
+async function renderDash(v) {
+  const it = S.item, sub = MORE.find(m => m[0] === S.tab);
+  v.innerHTML = `<div class="ctx"><div class="mark" style="background:${S.sector === 'animal' ? 'var(--clay-soft)' : 'var(--gold-soft)'}">${it.icon}</div><h1>${esc(sub ? noEmoji(t(sub[2])) : itemName(it))}</h1></div><div id="tabbody" class="stack"></div>`;
+  drawNav();
+  const body = $('#tabbody', v); const fn = { diag: tabDiag, sum: tabSummary, tips: tabTips, cal: tabCal, sch: tabSch, news: tabNews, wx: tabWx, shop: tabShop, more: tabMore }[S.tab];
+  try { await fn(body); } catch (e) { console.error(e); body.innerHTML = `<div class="banner alert" data-err="${esc(String(e && e.message || e))}">⚠️<span>${esc(t('weatherFail'))}</span></div>`; }
+}
+function tabMore(b) {
+  const mode = store.get('agri.theme', 'auto');
+  b.innerHTML = `<div class="card list">${MORE.map(([id, ic, k]) => `<button class="li go" data-m="${id}"><span class="ic">${ICON[ic]}</span><b>${esc(noEmoji(t(k)))}</b>${id === 'shop' ? `<span class="pill warn">${esc(t('soon'))}</span>` : '<span class="chev">›</span>'}</button>`).join('')}</div>
+    <div class="card"><p class="sec-l">${esc(t('appearance'))}</p>${seg('themeseg', [['auto', 'themeAuto'], ['light', 'themeLight'], ['dark', 'themeDark']], mode)}</div>`;
+  $$('[data-m]', b).forEach(x => x.onclick = () => { S.tab = x.dataset.m; renderDash($('#view')); scrollTo({ top: 0 }); });
+  bindSeg(b, 'themeseg', v => { setTheme(v); tabMore(b); });
+}
+const soon = (b) => b.innerHTML = `<div class="card empty"><span class="big" aria-hidden="true">🕒</span><b>${esc(t('comingSoon'))}</b></div>`;
 
 /* Diagnosis */
 async function tabDiag(b) {
@@ -127,11 +143,11 @@ function sprayBanner(tv) { return `<div class="banner ${tv.v.level === 'no' ? 'a
 async function showResult(out) {
   const id = S.result, r = await rec(id), classes = CLASSES[S.item.id]; if (!r) return;
   const healthy = id.endsWith('healthy'), pct = healthy ? 94 : 91;
-  out.innerHTML = `<div class="card"><div class="rhead"><div><span class="pill ${healthy ? '' : 'bad'}">${healthy ? '✓ ' + esc(t('healthy')) : '✓ ' + esc(t('tab_diagnosis').replace(/^\S+\s+/, ''))}</span> <span class="pill demo">${esc(t('demo'))}</span><h2>${esc(r.title)}</h2></div>
+  out.innerHTML = `<div class="card"><div class="rhead"><div><span class="pill ${healthy ? '' : 'bad'}">${healthy ? '✓ ' + esc(t('healthy')) : '! ' + esc(noEmoji(t('tab_diagnosis')))}</span> <span class="pill demo">${esc(t('demo'))}</span><h2>${esc(r.title)}</h2></div>
       <div class="ring" id="ring"><div><span>${pct}%</span><small>${esc(t('sure'))}</small></div></div></div></div>
     <div class="row"><button class="btn" id="say" ${'speechSynthesis' in window && ['en', 'hi'].includes(L().code) ? '' : 'hidden'}>🔊 ${esc(t('listen'))}</button>
-    <label class="pill" style="cursor:pointer"><input type="checkbox" id="heat" ${S.heat ? 'checked' : ''}> ${esc(t('focusArea'))}</label></div>
-    ${[['secOverview', r.overview], ['secNow', r.immediate_steps]].filter(x => x[1]).map(([k, v]) => `<div class="card"><p class="sec-l">${esc(t(k))}</p>${md(v)}</div>`).join('')}
+    <button class="togglechip" id="heat" aria-pressed="${S.heat}">${esc(t('focusArea'))}</button></div>
+    ${needEnglishNote()}<div class="card"><p class="sec-l">${esc(t('secOverview'))}</p>${md(r.overview)}${r.immediate_steps ? `<div class="row2" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)"><p class="sec-l">${esc(t('secNow'))}</p><p class="do" style="margin:0">${md(r.immediate_steps)}</p></div>` : ''}</div>
     <div id="solhost"></div>
     ${r.prevention ? `<div class="card"><p class="sec-l">${esc(t('secPrevent'))}</p>${md(r.prevention)}</div>` : ''}
     <div class="banner">🛡️<span>${esc(t('caution'))}</span></div>
@@ -139,7 +155,7 @@ async function showResult(out) {
   const drawSol = () => { const h = $('#solhost', out); h.innerHTML = solutionsCard(r.treatment_organic, r.treatment_chemical, S.item && S.sector === 'plant' ? todayVerdict() : null); bindSeg(h, 'solseg', v => { S.sol = v; drawSol(); }); };
   drawSol();
   requestAnimationFrame(() => requestAnimationFrame(() => $('#ring', out).style.setProperty('--p', pct)));
-  $('#heat', out).onchange = (e) => { S.heat = e.target.checked; const fnd = $('#fnd'); fnd.querySelector('.heat')?.remove(); if (S.heat && fnd.querySelector('img')) fnd.insertAdjacentHTML('beforeend', '<div class="heat"></div>'); };
+  $('#heat', out).onclick = (e) => { S.heat = !S.heat; e.currentTarget.setAttribute('aria-pressed', S.heat); const fnd = $('#fnd'); fnd.querySelector('.heat')?.remove(); if (S.heat && fnd.querySelector('img')) fnd.insertAdjacentHTML('beforeend', '<div class="heat"></div>'); };
   const say = $('#say', out); if (say) say.onclick = () => { const u = new SpeechSynthesisUtterance([r.title, r.immediate_steps].join('. ')); u.lang = L().code === 'hi' ? 'hi-IN' : 'en-IN'; speechSynthesis.cancel(); speechSynthesis.speak(u); };
   $$('[data-c]', out).forEach(b => b.onclick = () => { S.result = b.dataset.c; showResult(out); });
 }
@@ -165,9 +181,18 @@ async function buildFacts() {
 }
 const lblFn = (k) => t(k);
 async function tabSummary(b) {
-  const f = await buildFacts(), lines = GramSummary.summarize(f, lblFn);
-  b.innerHTML = `<div class="card"><p class="sec-l">🧠 ${esc(t('sumTitle'))} · ${esc(f.itemName)}</p>${needEnglishNote()}<div class="sumlines">${lines.map(l => `<div class="sl ${l.tone || ''}"><span class="sk">${esc(t(l.k))}</span><span>${md(l.text)}</span></div>`).join('')}</div></div>
+  const f = await buildFacts(), lines = GramSummary.summarize(f, lblFn), tv = todayVerdict();
+  const spray = lines.filter(l => l.k === 'sumSpray'), rest = lines.filter(l => !['sumProblem', 'secNow', 'sumSpray'].includes(l.k)), d = f.diagnosis;
+  const lvl = tv ? tv.v.level : null, vtxt = tv ? `${t(VLABEL[lvl])}` : '', vsub = tv ? `${t(REASON[tv.v.reason])}${tv.d.estimated ? ' · ' + t('estimated') : ''}` : '';
+  b.innerHTML = needEnglishNote() +
+    (tv ? `<div class="verdict ${lvl}"><span aria-hidden="true" style="font-size:var(--fs-h2)">${lvl === 'safe' ? '✓' : lvl === 'no' ? '✕' : '!'}</span><div>${esc(t('todaySpray'))}: ${esc(vtxt)}<small>${esc(vsub)}${f.weather.bestDay && lvl !== 'safe' ? ' · ' + esc(t('bestDay')) + ': ' + esc(f.weather.bestDay) : ''}</small></div></div>` : '') +
+    `<div class="card today">${d ? `<p class="sec-l">${esc(t('sumProblem'))}</p><div class="big">${esc(d.title)}</div><p class="muted" style="margin:0">${esc(GramSummary.clip(GramSummary.firstSentences(d.overview, 1), 140))}</p>
+      <div class="row2"><p class="sec-l">${esc(t('secNow'))}</p><p class="do">${esc(GramSummary.clip(GramSummary.firstSentences(d.now, 2), 200))}</p></div>
+      ${spray.length > 1 ? `<div class="banner" style="margin:16px 0 0">⚠️<span>${esc(spray[1].text)}</span></div>` : ''}`
+      : `<div class="empty" style="padding:8px"><span class="big" aria-hidden="true">${S.item.icon}</span>${esc(t('sumNone'))}<div style="margin-top:14px"><button class="btn" id="todiag">${ICON.camera} ${esc(noEmoji(t('tab_diagnosis')))}</button></div></div>`}</div>
+    ${rest.length ? `<div class="card list">${rest.map(l => `<div class="li"><span class="sk">${esc(t(l.k))}</span><span>${md(l.text)}</span></div>`).join('')}</div>` : ''}
     <div class="card" id="aicard"></div><div class="banner">🛡️<span>${esc(t('caution'))}</span></div>`;
+  const go = $('#todiag', b); if (go) go.onclick = () => { S.tab = 'diag'; renderDash($('#view')); };
   drawAI($('#aicard', b), f);
 }
 const aiLang = () => ({ en: 'English', hi: 'Hindi' }[L().code] || 'English');
@@ -278,7 +303,7 @@ async function tabShop(b) {
 /* ---------- News: synced from data/news.json (refreshed on a schedule), cached for offline ---------- */
 const NEWSKEY = 'agri.news';
 const readNews = () => { try { return JSON.parse(store.get(NEWSKEY, 'null')); } catch { return null; } };
-async function syncNews() { try { const r = await fetch('data/news.json', { cache: 'no-store' }); if (!r.ok) throw 0; const j = await r.json(); j.fetchedAt = Date.now(); store.set(NEWSKEY, JSON.stringify(j)); return true; } catch { return false; } }
+async function syncNews() { if (QA_OFFLINE) return false; try { const r = await fetch('data/news.json', { cache: 'no-store' }); if (!r.ok) throw 0; const j = await r.json(); j.fetchedAt = Date.now(); store.set(NEWSKEY, JSON.stringify(j)); return true; } catch { return false; } }
 async function tabNews(b) {
   let n = readNews(); if (!n) { await syncNews(); n = readNews(); }
   const list = (n && n.sections && (n.sections[S.sector] || [])) || [];
@@ -292,6 +317,7 @@ const WXKEY = 'agri.wx';
 const place = () => { try { return JSON.parse(store.get('agri.loc', 'null')) || { lat: 20.2961, lon: 85.8245, name: 'default' }; } catch { return { lat: 20.2961, lon: 85.8245, name: 'default' }; } };
 function readCache() { try { return JSON.parse(store.get(WXKEY, 'null')); } catch { return null; } }
 async function syncWeather(timeoutMs = 8000) {
+  if (QA_OFFLINE) return false;
   const p = place(), ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), timeoutMs);
   try {
     const u = `https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max&timezone=auto&forecast_days=10`;
@@ -314,20 +340,25 @@ async function tabWx(b) {
   await loadWeather(); drawWeather(b);
 }
 function drawWeather(b) {
-  const days = WX.days, best = G.bestSprayDay(days, 3), codes = G.weatherAdviceCodes(days);
-  const status = { online: `✓ ${t('synced')} ${ago(WX.syncedAt)}`, saved: `📴 ${t('offSaved')}${WX.syncedAt ? ' · ' + t('synced') + ' ' + ago(WX.syncedAt) : ''}`, estimate: `📴 ${t('offEst')}` }[WX.mode];
-  const p = place();
-  b.innerHTML = `<div class="card"><div class="row"><b class="grow">${esc(t('wx10'))}</b><span class="pill ${WX.mode === 'online' ? '' : 'warn'}">${esc(WX.mode === 'online' ? 'Online' : 'Offline')}</span></div><p class="muted" style="margin:6px 0 12px">${esc(status)}${p.name === 'default' ? ' · ' + esc(t('locDefault')) : ''}</p>
-      <div class="row wrap"><button class="btn sm" id="sync">↻ ${esc(t('syncNow'))}</button><button class="btn sm ghost" id="loc">📍 ${esc(t('useLoc'))}</button></div></div>
-    <div class="banner ${best ? '' : 'alert'}" style="margin:0">🌦️<span><b>${best ? esc(t('bestDay')) + ': ' + esc(fmt(best.date, { weekday: 'short', day: 'numeric', month: 'short' })) : esc(t('noWindow'))}</b>${best && best.estimated ? ' · ' + esc(t('estimated')) : ''}</span></div>
-    <div class="stack">${days.map((d, i) => { const v = G.sprayVerdict(d, { monsoon: monsoon() }), vv = VERD[v.level]; return `<div class="card day ${d.estimated ? 'est' : ''}"><div class="dh"><span class="wi">${wIcon(d)}</span><div class="grow"><b>${esc(i === 0 ? t('stageNow') : fmt(d.date, { weekday: 'short' }))} · ${esc(fmt(d.date))}</b><div class="muted">${Math.round(d.tMax)}° / ${Math.round(d.tMin)}° · ${d.rainProb}% · ${Math.round(d.rainMm * 10) / 10} mm · ${Math.round(d.windMax)} km/h</div></div></div><div class="why"><span class="pill ${vv[0]}">${vv[1]} ${esc(t(VLABEL[v.level]))}</span> ${esc(t(REASON[v.reason]))}${d.estimated ? ` <span class="pill warn">${esc(t('estimated'))}</span>` : ''}</div></div>`; }).join('')}</div>
-    <div class="card"><p class="sec-l">${esc(t('tab_tips'))}</p>${adviceLines(codes)}</div>`;
+  const days = WX.days, best = G.bestSprayDay(days, 3), codes = G.weatherAdviceCodes(days), p = place();
+  WX.sel = Math.min(WX.sel || 0, days.length - 1);
+  const status = { online: `${t('synced')} ${ago(WX.syncedAt)}`, saved: `${t('offSaved')}${WX.syncedAt ? ' · ' + t('synced') + ' ' + ago(WX.syncedAt) : ''}`, estimate: `${t('offEst')}` }[WX.mode];
+  const dayVerdict = (d) => G.sprayVerdict(d, { monsoon: monsoon() });
+  const sel = days[WX.sel], sv = dayVerdict(sel);
+  b.innerHTML = `<div class="verdict ${best ? 'safe' : 'no'}"><span aria-hidden="true" style="font-size:var(--fs-h2)">${best ? '✓' : '✕'}</span><div>${best ? esc(t('bestDay')) + ': ' + esc(fmt(best.date, { weekday: 'short', day: 'numeric', month: 'short' })) : esc(t('noWindow'))}<small>${esc(status)}${p.name === 'default' ? ' · ' + esc(t('locDefault')) : ''}</small></div></div>
+    <div class="strip" role="group" aria-label="${esc(t('wx10'))}">${days.map((d, i) => { const v = dayVerdict(d); return `<button data-i="${i}" aria-pressed="${i === WX.sel}" class="${d.estimated ? 'est' : ''}"><span class="d">${esc(i === 0 ? t('stageNow') : fmt(d.date, { weekday: 'short' }))}</span><span class="w">${wIcon(d)}</span><span class="t">${Math.round(d.tMax)}°</span><span class="dot ${v.level}" title="${esc(t(VLABEL[v.level]))}"></span></button>`; }).join('')}</div>
+    <div class="card"><div class="row"><b class="grow" style="font-size:var(--fs-title)">${esc(fmt(sel.date, { weekday: 'long', day: 'numeric', month: 'short' }))}</b>${sel.estimated ? `<span class="pill warn">${esc(t('estimated'))}</span>` : ''}</div>
+      <div class="verdict ${sv.level}" style="margin:12px 0"><span aria-hidden="true" style="font-size:24px">${sv.level === 'safe' ? '✓' : sv.level === 'no' ? '✕' : '!'}</span><div>${esc(t(VLABEL[sv.level]))}<small>${esc(t(REASON[sv.reason]))}</small></div></div>
+      <div class="stats"><div class="stat"><b>${Math.round(sel.tMax)}° / ${Math.round(sel.tMin)}°</b><span>${esc(t('temp'))}</span></div><div class="stat"><b>${sel.rainProb}% · ${Math.round(sel.rainMm * 10) / 10} mm</b><span>${esc(t('rain'))}</span></div><div class="stat"><b>${Math.round(sel.windMax)} km/h</b><span>${esc(t('wind'))}</span></div></div></div>
+    <div class="card"><p class="sec-l">${esc(noEmoji(t('tab_tips')))}</p>${adviceLines(codes)}</div>
+    <div class="row wrap"><button class="btn sm" id="sync">${'↻'} ${esc(t('syncNow'))}</button><button class="btn sm ghost" id="loc">📍 ${esc(t('useLoc'))}</button></div>`;
+  $$('.strip button', b).forEach(x => x.onclick = () => { WX.sel = +x.dataset.i; drawWeather(b); });
   $('#sync', b).onclick = async () => { b.querySelector('#sync').disabled = true; await loadWeather(true); drawWeather(b); };
   $('#loc', b).onclick = () => navigator.geolocation ? navigator.geolocation.getCurrentPosition(async pos => { store.set('agri.loc', JSON.stringify({ lat: +pos.coords.latitude.toFixed(3), lon: +pos.coords.longitude.toFixed(3), name: 'gps' })); await loadWeather(true); drawWeather(b); }, () => {}, { timeout: 8000 }) : 0;
 }
 
 /* Expert chat (demo canned reply; WhatsApp hand-off) */
-$('#fab').onclick = () => { $('#chat').hidden = false; $('#chati').placeholder = t('askHint'); if (!$('#chatb').children.length) addMsg(t('expertHi')); };
+$('#askbtn').onclick = () => { $('#chat').hidden = false; $('#chati').placeholder = t('askHint'); if (!$('#chatb').children.length) addMsg(t('expertHi')); };
 $('#chatx').onclick = () => $('#chat').hidden = true;
 const addMsg = (txt, me) => { const d = document.createElement('div'); d.className = 'msg' + (me ? ' me' : ''); d.textContent = txt; $('#chatb').append(d); $('#chatb').scrollTop = 1e6; };
 $('#chatf').onsubmit = async (e) => {
@@ -365,6 +396,18 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
   autoSync(true);
   $('#pick-lang').innerHTML = LANGS.map(l => `<button data-code="${l.code}">${l.name}${l.mt ? '<small>machine draft</small>' : l.ui ? '' : '<small>English for now</small>'}</button>`).join('');
   $$('#pick-lang button').forEach(b => b.onclick = () => { setLang(b.dataset.code); $('#welcome').close(); });
-  const first = !S.lang; S.lang = S.lang || 'or'; applyI18n(); await render();
-  if (first && $('#welcome').showModal) $('#welcome').showModal();
+  // QA deep link for design review and tests: ?lang=en&theme=dark&go=plant/paddy/sum&res=plant_paddy_blast&photo=1&days=40
+  const q = new URLSearchParams(location.search);
+  if (q.get('lang')) { S.lang = q.get('lang'); store.set('agri.lang', S.lang); }
+  if (q.get('theme')) document.documentElement.dataset.theme = q.get('theme');
+  const first = !S.lang; S.lang = S.lang || 'or'; applyI18n();
+  if (q.get('go')) {
+    const [sec, id, tab] = q.get('go').split('/'); S.sector = sec || null; S.item = (DOMAIN[sec] || []).find(x => x.id === id) || null; S.tab = tab || 'diag';
+    if (q.get('days') && S.item) { const d = new Date(); d.setDate(d.getDate() - +q.get('days')); store.set(startKey(), G.iso(d)); }
+    if (q.get('res')) S.result = q.get('res'); if (q.get('photo')) S.photo = 'icon.svg';
+    if (S.sub && q.get('sub') && S.item) S.sub[S.item.id + ':cal'] = q.get('sub');
+  }
+  await render();
+  if (q.get('audit')) setTimeout(() => { const sizes = {}, radii = {}, tiny = []; document.querySelectorAll('#view *, .top *, .bnav *').forEach(el => { if (!el.offsetParent) return; const cs = getComputedStyle(el); if ([...el.childNodes].some(c => c.nodeType === 3 && c.textContent.trim())) { const f = parseFloat(cs.fontSize); sizes[f] = (sizes[f] || 0) + 1; } if (cs.borderRadius !== '0px') radii[cs.borderRadius] = (radii[cs.borderRadius] || 0) + 1; if (['BUTTON', 'A', 'INPUT', 'SELECT'].includes(el.tagName)) { const b = el.getBoundingClientRect(); if (b.width < 44 || b.height < 44) tiny.push(el.tagName + ':' + (el.textContent || el.id).trim().slice(0, 14) + ' ' + Math.round(b.width) + 'x' + Math.round(b.height)); } }); document.documentElement.setAttribute('data-audit', JSON.stringify({ sizes, radii, tiny, h: document.documentElement.scrollHeight })); }, 2500);
+  if (first && !q.get('lang') && $('#welcome').showModal) $('#welcome').showModal();
 })();

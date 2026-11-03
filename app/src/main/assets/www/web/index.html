@@ -8,16 +8,17 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="app.css">
+<script>addEventListener("error", function (e) { document.documentElement.setAttribute("data-js-error", e.message + " @" + e.filename.split("/").pop() + ":" + e.lineno); });</script>
 </head>
 <body>
 <a class="skip" href="#view">Skip to content</a>
 <div class="wrap">
   <header class="top">
-    <button class="icon-btn" id="back" aria-label="Back" hidden>←</button>
+    <button class="icon-btn" id="back" aria-label="Back" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="mark" aria-hidden="true">🌾</div>
     <div class="brand"><b>GramAI</b><small data-i18n="tagline"></small></div>
-    <button class="icon-btn" id="langbtn" aria-label="Language">🌐</button>
-    <button class="icon-btn" id="theme" aria-label="Light / dark">◐</button>
+    <button class="langchip" id="langbtn" aria-label="Language">OR</button>
+    <button class="icon-btn" id="askbtn" aria-label="Kisan Mitra" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></button>
   </header>
   <div class="netbar on" id="netbar" role="status" aria-live="polite"></div>
   <div class="banner" id="pending" hidden>🛡️<span></span></div>
@@ -25,7 +26,7 @@
   <footer class="foot">© GramAI · Chandra Shekhar</footer>
 </div>
 
-<button class="fab" id="fab" aria-label="Kisan Mitra">👨‍🌾</button>
+<nav class="bnav" id="bnav" aria-label="Main" hidden><div></div></nav>
 <section class="sheet-chat" id="chat" hidden aria-label="Kisan Mitra">
   <div class="chat-h"><b data-i18n="expertTitle"></b><button class="icon-btn" id="chatx" aria-label="Close">✕</button></div>
   <div class="chat-b" id="chatb"></div>
