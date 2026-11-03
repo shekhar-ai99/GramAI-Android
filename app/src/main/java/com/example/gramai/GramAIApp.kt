@@ -44,6 +44,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import com.example.gramai.ui.*
+import com.example.gramai.i18n.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.statusBarsPadding
+import com.example.gramai.ui.theme.*
 import java.util.*
 
 @Composable
@@ -122,146 +129,93 @@ fun GramAIApp(viewModel: GramAIViewModel) {
         bmp?.let { bitmap = it; imageUri = null; showResult = false }
     }
 
+    // Language for the whole UI and the result text. Saved so a farmer sets it once.
+    val prefs = remember { context.getSharedPreferences("gramai", android.content.Context.MODE_PRIVATE) }
+    var language by remember { mutableStateOf(Language.fromCode(prefs.getString("lang", null))) }
+    val s = stringsFor(language)
+
+    fun speakResult(flushId: String) {
+        val engine = tts.value
+        val locale = language.ttsLocale
+        if (engine == null || locale == null) return
+        if (engine.setLanguage(locale).let { it == TextToSpeech.LANG_MISSING_DATA || it == TextToSpeech.LANG_NOT_SUPPORTED }) {
+            Toast.makeText(context, "${language.nativeName} voice not installed.", Toast.LENGTH_LONG).show()
+            return
+        }
+        engine.setSpeechRate(speechRate)
+        engine.stop()
+        engine.speak(if (language == Language.ODIA) resultOdia else resultEng, TextToSpeech.QUEUE_FLUSH, null, flushId)
+    }
+
+    // Odia voice is the one the app has always spoken; keep auto-play for Odia only.
+    val autoPlay = language == Language.ODIA
+
+    val accentTile = if (mode == "skin") SkinClaySoft else PaddyGoldSoft
+
+    CompositionLocalProvider(LocalStrings provides s) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364))
-                )
-            )
+            .background(Cream)
+            .statusBarsPadding()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            // HEADER + OFFLINE BADGE (unchanged)
-            Card(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-                elevation = CardDefaults.cardElevation(0.dp)
-            ) {
-                Box(Modifier.fillMaxWidth()) {
-                    Surface(
-                        color = Color(0xFF4CAF50).copy(alpha = 0.2f),
-                        shape = RoundedCornerShape(bottomStart = 12.dp),
-                        modifier = Modifier.align(Alignment.TopEnd)
-                    ) {
-                        Text(
-                            "⚡ Offline AI",
-                            color = Color(0xFF7CFF91),
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
-                    }
+            AppHeader(offlineLabel = s.offline)
 
-                    Column(
-                        modifier = Modifier.padding(20.dp).fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("GramAI – ଗ୍ରାମଏଆଇ", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.White)
-                        Text("AI Powered Paddy & Skin Detection", fontSize = 14.sp, color = Color(0xFFB0BEC5))
-                        Text("ଧାନ ଓ ଚର୍ମ ରୋଗ ଚିହ୍ନଟ", fontSize = 15.sp, color = Color(0xFFB0BEC5), fontWeight = FontWeight.Medium)
-                    }
-                }
+            LanguagePicker(
+                selected = language,
+                label = s.language,
+                onSelect = { language = it; prefs.edit().putString("lang", it.code).apply() }
+            )
+            if (!language.hasUiText) {
+                // Santali / Ho: no reviewed text yet. Be upfront rather than guess.
+                CautionBanner("${language.nativeName}: translation is being prepared. Showing English for now.")
             }
 
-            // MODE SELECTION (unchanged)
             if (mode == null) {
-                Spacer(Modifier.height(20.dp))
-                Button(
-                    onClick = { mode = "paddy" },
-                    modifier = Modifier.fillMaxWidth().height(65.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("🌾 Paddy Detection", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                        Text("ଧାନ ରୋଗ ଚିହ୍ନଟ", fontSize = 12.sp, color = Color.White.copy(alpha = 0.9f))
+                // ---------------- HOME ----------------
+                HeroCard(eyebrow = s.heroEyebrow, title = s.heroTitle)
+                Text(s.chooseCheck, style = MaterialTheme.typography.titleMedium, color = Ink)
+                ModeCard("🌾", s.paddyTitle, "Paddy · ଧାନ", PaddyGoldSoft) { mode = "paddy" }
+                ModeCard("🧑‍⚕️", s.skinTitle, "Skin · ଚର୍ମ", SkinClaySoft) { mode = "skin" }
+                CautionBanner(s.tip)
+            } else {
+                // ---------------- SCAN / RESULT ----------------
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RoundIconButton("←", s.back, onClick = {
+                        mode = null; imageUri = null; bitmap = null; showResult = false
+                    })
+                    Spacer(Modifier.width(12.dp))
+                    Box(Modifier.size(40.dp).clip(CircleShape).background(accentTile), contentAlignment = Alignment.Center) {
+                        Text(if (mode == "paddy") "🌾" else "🧑‍⚕️", fontSize = 20.sp)
                     }
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        if (mode == "paddy") s.paddyTitle else s.skinTitle,
+                        style = MaterialTheme.typography.titleLarge, color = Ink
+                    )
                 }
 
-                Spacer(Modifier.height(16.dp))
-                Button(
-                    onClick = { mode = "skin" },
-                    modifier = Modifier.fillMaxWidth().height(65.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E88E5))
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("🧑‍⚕️ Skin Detection", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                        Text("ଚର୍ମ ରୋଗ ଚିହ୍ନଟ", fontSize = 12.sp, color = Color.White.copy(alpha = 0.9f))
-                    }
-                }
-
-                Spacer(Modifier.height(40.dp))
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0)),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Info, contentDescription = null, tint = Color(0xFFFF9800))
-                        Spacer(Modifier.width(12.dp))
-                        Text("Tip: Take photos in bright light for best results.", color = Color(0xFFE65100), fontSize = 12.sp)
-                    }
-                }
-            }
-            else {
-
-                // SCANNER UI (unchanged)
-                Text(
-                    text = if (mode == "paddy") "Selected: Paddy / ଧାନ" else "Selected: Skin / ଚର୍ମ",
-                    fontSize = 20.sp, color = Color.White
-                )
-
-                Spacer(Modifier.height(20.dp))
-
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    OutlinedButton(
-                        onClick = { galleryLauncher.launch("image/*") },
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("📂 Upload")
-                            Text("ଅପଲୋଡ୍", fontSize = 10.sp)
-                        }
-                    }
-                    OutlinedButton(
-                        onClick = { cameraLauncher.launch(null) },
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("📷 Camera")
-                            Text("କ୍ୟାମେରା", fontSize = 10.sp)
-                        }
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                // Vision Scanner (unchanged)
-                Box(
-                    modifier = Modifier
-                        .size(280.dp)
-                        .padding(8.dp)
-                        .border(3.dp, Brush.sweepGradient(listOf(Color(0xFF00E5FF), Color(0xFFD500F9), Color(0xFF2979FF))), RoundedCornerShape(20.dp))
-                        .clip(RoundedCornerShape(20.dp))
-                ) {
+                ViewfinderFrame {
                     if (imageUri != null) {
                         AsyncImage(model = imageUri, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
                     } else if (bitmap != null) {
                         Image(bitmap = bitmap!!.asImageBitmap(), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
                     } else {
-                        Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha=0.3f)), contentAlignment = Alignment.Center) {
-                            Text("No Image Selected", color = Color.Gray)
+                        Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(if (mode == "paddy") "🌾" else "🖐️", fontSize = 48.sp)
+                            Spacer(Modifier.height(8.dp))
+                            StatusPill(
+                                if (mode == "paddy") s.scanHintPaddy else s.scanHintSkin,
+                                BrandSoft, BrandDark
+                            )
                         }
                     }
 
@@ -272,17 +226,32 @@ fun GramAIApp(viewModel: GramAIViewModel) {
                                 .height(4.dp)
                                 .align(Alignment.TopCenter)
                                 .offset(y = (264 * scanLineY).dp)
-                                .background(Brush.horizontalGradient(listOf(Color.Transparent, Color.Red, Color.Transparent)))
+                                .background(Brush.horizontalGradient(listOf(Color.Transparent, BrandBright, Color.Transparent)))
                         )
-                        Box(Modifier.fillMaxSize().background(Color(0xFF00FF00).copy(alpha = 0.1f)))
+                        Box(Modifier.fillMaxSize().background(BrandBright.copy(alpha = 0.10f)))
+                    }
+                }
+
+                if (imageUri == null && bitmap == null) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        HintChip(s.goodLight)
+                        Spacer(Modifier.width(10.dp))
+                        HintChip(s.holdSteady)
+                    }
+                    PrimaryPillButton(onClick = { cameraLauncher.launch(null) }) {
+                        Text("📷  ${s.camera}", style = MaterialTheme.typography.labelLarge)
+                    }
+                    TextButton(
+                        onClick = { galleryLauncher.launch("image/*") },
+                        modifier = Modifier.align(Alignment.CenterHorizontally).heightIn(min = 48.dp)
+                    ) {
+                        Text("🖼️  ${s.gallery}", color = Brand, fontWeight = FontWeight.Bold)
                     }
                 }
 
                 if (imageUri != null || bitmap != null) {
-                    Spacer(Modifier.height(20.dp))
-
-                    // --- ANALYZE BUTTON (unchanged) ---
-                    Button(
+                    PrimaryPillButton(
+                        enabled = !isAnalyzing,
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
 
@@ -309,225 +278,144 @@ fun GramAIApp(viewModel: GramAIViewModel) {
                                     resultEng = eng
                                     showResult = true
                                     isAnalyzing = false
-
-                                    // AUTO-SPEAK (updated with speedRate)
-                                    val engine = tts.value
-                                    val locale = Locale("or", "IN")
-                                    val result = engine?.setLanguage(locale)
-                                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                                        Toast.makeText(context, "Odia voice not installed.", Toast.LENGTH_LONG).show()
-                                    } else {
-                                        engine?.setSpeechRate(speechRate)
-                                        engine?.stop()
-                                        engine?.speak(resultOdia, TextToSpeech.QUEUE_FLUSH, null, "tts_auto_play")
-                                    }
+                                    if (autoPlay && conf > UNSURE_BELOW) speakResult("tts_auto_play")
                                 }
                             }
-                        },
-                        modifier = Modifier.fillMaxWidth().height(65.dp),
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107))
-                    ) {
-                        if (isAnalyzing) {
-                            Text("Scanning... / ଚିହ୍ନଟ ଚାଲିଛି...", color = Color.Black)
-                        } else {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("🔍 Analyze with AI", fontSize = 18.sp, color = Color.Black, fontWeight = FontWeight.Bold)
-                                Text("AI ଦ୍ୱାରା ଚିହ୍ନଟ କରନ୍ତୁ", fontSize = 12.sp, color = Color.Black, fontWeight = FontWeight.Medium)
-                            }
                         }
+                    ) {
+                        Text(
+                            if (isAnalyzing) s.scanning else "🔍  ${s.analyze}",
+                            style = MaterialTheme.typography.labelLarge
+                        )
                     }
                 }
 
-                // RESULTS CARD (unchanged except speed slider)
+                // ---------------- RESULT ----------------
                 AnimatedVisibility(
                     visible = showResult,
                     enter = fadeIn() + slideInVertically(initialOffsetY = { 50 }),
                     exit = fadeOut()
                 ) {
-                    Spacer(Modifier.height(24.dp))
+                    // Only Odia and English result text exist today; other languages show English.
+                    val shown = if (language == Language.ODIA) resultOdia else resultEng
+                    val lines = parseResult(shown)
+                    val unsure = confidence <= UNSURE_BELOW
+                    val title = if (unsure) s.unsure
+                        else lines.firstOrNull()?.second?.replace(Regex("\\s*\\(\\d+(\\.\\d+)?%\\)"), "") ?: ""
+                    val caution = lines.firstOrNull { it.first == "⚠" }?.second ?: s.caution
+                    // Skin dosage is medical advice: never shown until a clinician reviews it.
+                    val hidden = setOf("⚠", "Dosage", "ମାତ୍ରା")
+                    val sections = if (unsure) emptyList() else lines.drop(1).filter {
+                        it.first.isNotBlank() && !(mode == "skin" && it.first in hidden) && it.first != "⚠"
+                    }
 
-                    Card(
-                        modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f)),
-                        elevation = CardDefaults.cardElevation(0.dp)
-                    ) {
-
-                        Column(modifier = Modifier.padding(20.dp)) {
-
-                            // Confidence Section (unchanged)
-                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Column {
-                                    Text("AI Confidence", color = Color.Gray, fontSize = 12.sp)
-                                    Text("ବିଶ୍ୱସନୀୟତା", color = Color.Gray, fontSize = 10.sp)
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        GramCard {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Column(Modifier.weight(1f)) {
+                                    if (unsure) StatusPill("📷 ${s.retakePhoto}", AmberSoft, Amber)
+                                    else StatusPill("✓ ${s.diagnosis}", BrandSoft, BrandDark)
+                                    Spacer(Modifier.height(10.dp))
+                                    Text(title, style = MaterialTheme.typography.headlineMedium, color = Ink)
                                 }
-                                Text("${String.format("%.1f", confidence)}%", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                                Spacer(Modifier.width(12.dp))
+                                ConfidenceRing(confidence, s.sure)
                             }
-
-                            Spacer(Modifier.height(4.dp))
-                            LinearProgressIndicator(
-                                progress = confidence / 100f,
-                                modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
-                                color = if (confidence > 80) Color(0xFF4CAF50) else Color(0xFFFF9800)
-                            )
-
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                text = when {
-                                    confidence > 85 -> "✅ Highly Reliable Result"
-                                    confidence > 60 -> "⚠️ Moderate Accuracy"
-                                    else -> "❌ Unclear - Please Retake Photo"
+                                when {
+                                    confidence > 85 -> s.reliable
+                                    confidence > UNSURE_BELOW -> s.moderate
+                                    else -> s.unclear
                                 },
-                                fontSize = 12.sp, color = Color.LightGray
+                                style = MaterialTheme.typography.bodyMedium, color = InkSoft
                             )
+                        }
 
-                            Spacer(Modifier.height(20.dp))
+                        if (unsure) AlertBanner(s.unsureBody)
 
-                            // --- ODIA SECTION ---
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text("Diagnosis (Odia)", color = Color(0xFF7CFF91), fontWeight = FontWeight.Bold)
-                            }
-
-                            Spacer(Modifier.height(8.dp))
-
-                            //---------------------------
-                            //  🎚 MINIMAL SPEED SLIDER
-                            //---------------------------
-                            Text(
-                                text = "${String.format("%.1f", speechRate)}x",
-                                color = Color.White,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-
-                            Slider(
-                                value = speechRate,
-                                onValueChange = { speechRate = it },
-                                valueRange = 0.5f..2.0f,
-                                steps = 10,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-
-                            Spacer(Modifier.height(8.dp))
-
-                            //---------------------------
-                            //  🔊 LISTEN BUTTON (updated)
-                            //---------------------------
-                            Button(
-                                onClick = {
-                                    val engine = tts.value
-                                    if (engine == null) {
-                                        Toast.makeText(context, "TTS not ready", Toast.LENGTH_SHORT).show()
-                                        return@Button
-                                    }
-
-                                    val locale = Locale("or", "IN")
-                                    val result = engine.setLanguage(locale)
-
-                                    if (result == TextToSpeech.LANG_MISSING_DATA ||
-                                        result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                                        Toast.makeText(context, "Odia voice missing.", Toast.LENGTH_LONG).show()
-                                    } else {
-                                        engine.setSpeechRate(speechRate) // apply slider speed
-                                        engine.stop()
-                                        engine.speak(resultOdia, TextToSpeech.QUEUE_FLUSH, null, "tts_listen_click")
-                                    }
-                                },
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
-                                shape = RoundedCornerShape(50),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Icon(Icons.Default.PlayArrow, contentDescription = "Play", tint = Color.White, modifier = Modifier.size(18.dp))
+                        if (!unsure && language.ttsLocale != null) {
+                            PrimaryPillButton(onClick = { speakResult("tts_listen_click") }) {
+                                Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(22.dp))
                                 Spacer(Modifier.width(8.dp))
-                                Text("Listen / ଶୁଣନ୍ତୁ", color = Color.White, fontSize = 12.sp)
+                                Text(s.listen, style = MaterialTheme.typography.labelLarge)
                             }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text("${s.speed} ${String.format("%.1f", speechRate)}x", color = InkSoft, fontSize = 13.sp)
+                                Slider(
+                                    value = speechRate,
+                                    onValueChange = { speechRate = it },
+                                    valueRange = 0.5f..2.0f,
+                                    steps = 10,
+                                    colors = SliderDefaults.colors(thumbColor = Brand, activeTrackColor = Brand, inactiveTrackColor = CardBorder),
+                                    modifier = Modifier.weight(1f).padding(start = 12.dp)
+                                )
+                            }
+                        }
 
-                            Spacer(Modifier.height(8.dp))
-                            Text(resultOdia, color = Color.White, fontSize = 16.sp, lineHeight = 24.sp)
+                        sections.forEach { (label, body) -> SectionCard(label, body) }
 
-                            Spacer(Modifier.height(16.dp))
-                            Divider(color = Color.White.copy(alpha = 0.2f))
-                            Spacer(Modifier.height(16.dp))
+                        CautionBanner(caution)
 
-                            // English Diagnosis (unchanged)
-                            Text("Diagnosis (English)", color = Color(0xFF64B5F6), fontWeight = FontWeight.Bold)
-                            Text(resultEng, color = Color.White.copy(alpha = 0.9f), fontSize = 15.sp)
-
-                            Spacer(Modifier.height(20.dp))
-
-                            // SHARE BUTTON (unchanged)
-                            Button(
-                                onClick = {
-                                    val shareIntent = Intent().apply {
-                                        action = Intent.ACTION_SEND
-                                        putExtra(Intent.EXTRA_TEXT, "GramAI Diagnosis:\n\n$resultEng\n\n$resultOdia")
-                                        type = "text/plain"
-                                    }
-                                    context.startActivity(Intent.createChooser(shareIntent, "Share Result"))
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.2f))
-                            ) {
-                                Icon(Icons.Default.Share, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
-                                Spacer(Modifier.width(8.dp))
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Text("Share Result with Doctor", color = Color.White)
-                                    Text("ଡାକ୍ତରଙ୍କ ସହ ସେୟାର କରନ୍ତୁ", color = Color.LightGray, fontSize = 10.sp)
+                        OutlinedButton(
+                            onClick = {
+                                val shareIntent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, "GramAI:\n\n$resultEng\n\n$resultOdia")
+                                    type = "text/plain"
                                 }
-                            }
+                                context.startActivity(Intent.createChooser(shareIntent, s.share))
+                            },
+                            modifier = Modifier.fillMaxWidth().height(56.dp),
+                            shape = RoundedCornerShape(50),
+                            border = BorderStroke(1.5.dp, Brand),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Brand)
+                        ) {
+                            Icon(Icons.Default.Share, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(s.share, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
 
-                Spacer(Modifier.height(24.dp))
-
-                // RETAKE BUTTON (unchanged)
                 if (showResult) {
-                    TextButton(onClick = {
-                        imageUri = null; bitmap = null; showResult = false
-                    }) {
-                        Icon(Icons.Default.Refresh, contentDescription = null, tint = Color.LightGray)
-                        Spacer(Modifier.width(4.dp))
-                        Text("Retake Photo / ପୁନର୍ବାର ଫଟୋ ନିଅନ୍ତୁ", color = Color.LightGray)
+                    TextButton(
+                        onClick = { imageUri = null; bitmap = null; showResult = false },
+                        modifier = Modifier.align(Alignment.CenterHorizontally).heightIn(min = 48.dp)
+                    ) {
+                        Icon(Icons.Default.Refresh, contentDescription = null, tint = InkSoft)
+                        Spacer(Modifier.width(6.dp))
+                        Text(s.retake, color = InkSoft)
                     }
                 }
-
-                TextButton(onClick = {
-                    mode = null; imageUri = null; bitmap = null; showResult = false
-                }) {
-                    Text("← Change Mode / ମୋଡ୍ ବଦଳାନ୍ତୁ", color = Color.LightGray)
-                }
             }
 
-            Spacer(Modifier.height(40.dp))
-
-            // FOOTER (unchanged)
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text("🌾🩺 AI for Health & Agriculture", color = Color(0xFF7CFF91), fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(12.dp))
-                    Text("Lead Researcher", color = Color.Gray, fontSize = 10.sp)
-                    Text("Chandra Shekhar", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                    Spacer(Modifier.height(8.dp))
-                }
-            }
-
-            Spacer(Modifier.height(20.dp))
+            Text(
+                "${s.footer} · Chandra Shekhar",
+                style = MaterialTheme.typography.labelSmall,
+                color = InkSoft,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 12.dp)
+            )
         }
+    }
     }
 
     DisposableEffect(Unit) {
         onDispose { tts.value?.shutdown() }
     }
 }
+
+/** Below this confidence the app shows "Not sure" and withholds remedies. */
+private const val UNSURE_BELOW = 60f
+
+/** Splits "Label: value" lines of the result text into (label, value) pairs for display. */
+private fun parseResult(text: String): List<Pair<String, String>> =
+    text.split("\n").filter { it.isNotBlank() }.map { line ->
+        val i = line.indexOf(':')
+        if (i in 1..24 && !line.startsWith("⚠")) line.substring(0, i).trim() to line.substring(i + 1).trim()
+        else line.trim() to ""
+    }.map { (a, b) ->
+        // caution lines have no short label: keep the whole sentence in `second`
+        if (a.startsWith("⚠")) "⚠" to a.removePrefix("⚠️").removePrefix("⚠").trim() + (if (b.isNotEmpty()) ": $b" else "")
+        else a to b
+    }
